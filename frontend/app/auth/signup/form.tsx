@@ -40,8 +40,8 @@ export function SignupForm(props: TSignupFormProps) {
       <form onSubmit={onSubmit}>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="name">Name</FieldLabel>
-            <Input disabled={isSubmitting} id="name" type="text" placeholder="Name" required />
+            <FieldLabel htmlFor="fullname">Name</FieldLabel>
+            <Input disabled={isSubmitting} id="fullname" type="text" placeholder="Full name" required />
           </Field>
           <Field>
             <FieldLabel htmlFor="username">Username</FieldLabel>

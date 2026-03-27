@@ -23,7 +23,7 @@ export default function Page() {
       const form = e.currentTarget;
       const username = form["username"].value
       const password = form["password"].value
-      const name = form["name"].value
+      const name = form["fullname"].value
 
 
       const response = await createUserApiV1AuthUsersPost({
