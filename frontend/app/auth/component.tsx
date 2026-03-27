@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { GrainGradient, SimplexNoise } from "@paper-design/shaders-react";
+import { Dithering, GrainGradient, SimplexNoise } from "@paper-design/shaders-react";
 
 export type TAuthContainerProps = React.HTMLProps<HTMLDivElement>;
 
@@ -27,14 +27,15 @@ export function AuthContainer(props: TAuthContainerProps) {
         <div className="w-full max-w-sm">{children}</div>
       </div>
       <div className="absolute inset-0">
-        <SimplexNoise
+        <Dithering
           width="100%"
           height="100%"
-          colors={["#a1a1a1", "#b1b1b1", "#c1c1c1", "#d1d1d1", "#e1e1e1"]}
-          stepsPerColor={2}
-          softness={0}
-          speed={0.5}
-          scale={0.6}
+          shape="warp"
+          colorBack="#ffffff"
+          colorFront="#aaaaaa"
+          type="4x4"
+          size={2.5}
+          speed={0.1}
         />
       </div>
     </div>
