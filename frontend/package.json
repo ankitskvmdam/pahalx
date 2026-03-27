@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "openapi-ts": "openapi-ts -o ./client -i http://localhost:8000/openapi.json"
+    "openapi-ts": "openapi-ts"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.72",
+    "axios": "^1.13.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.7.0",
