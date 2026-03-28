@@ -14,7 +14,7 @@ export default function Page() {
         <p className="muted-foreground">What do you want to chat about?</p>
         <ChatInput />
       </div>
-      <div className="absolute z-1 inset-0 opacity-10">
+      <div className="absolute z-1 inset-0 opacity-10 pointer-events-none">
         <GrainGradient
           width="100%"
           height="100%"

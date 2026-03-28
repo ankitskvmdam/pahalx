@@ -5,9 +5,11 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function DashboardSidebarHeader() {
   const { state } = useSidebar();
+  const isMobile = useIsMobile();
 
   return (
     <SidebarHeader className="pb-8">
@@ -15,7 +17,7 @@ export function DashboardSidebarHeader() {
         {state === "expanded" ? (
           <>
             <LogoWithName />
-            <SidebarTrigger />
+            {!isMobile && <SidebarTrigger />}
           </>
         ) : (
           <div className="group flex items-center justify-between w-full">
