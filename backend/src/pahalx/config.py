@@ -19,7 +19,12 @@ DB_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME
 SECRET_KEY: str = (
     os.getenv("SECRET_KEY") if os.getenv("SECRET_KEY") else "SECRET_KEY_NOT_SET"
 )
+
 ALGORITHM: str = (
     os.getenv("ALGORITHM") if os.getenv("ALGORITHM") else "ALGORITHM_NOT_SET"
 )
 ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES") or 30)
+
+AI_ENDPOINT: str = (
+    os.getenv("AI_ENDPOINT") if os.getenv("AI_ENDPOINT") else "AI_ENDPOINT_NOT_SET"
+)
