@@ -24,7 +24,7 @@ export default function Page() {
           intensity={0.5}
           noise={0.25}
           shape="corners"
-          speed={0.4}
+          speed={1}
         />
       </div>
     </div>
