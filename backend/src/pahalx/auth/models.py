@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from pahalx.database.database import Base, engine
+from pahalx.database.database import Base
 
 
 class UserModel(Base):
@@ -10,6 +10,3 @@ class UserModel(Base):
     username = Column(String, unique=True, index=True)
     name = Column(String)
     password = Column(String)
-
-
-Base.metadata.create_all(bind=engine)

@@ -13,6 +13,7 @@ import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SIGNUP_URL } from "@/app/_contants/routes";
 
 export type TLoginFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -68,8 +69,7 @@ export function LoginForm(props: TLoginFormProps) {
               />
             </Button>
             <FieldDescription className="text-center">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/signup">Sign up</Link>
+              Don&apos;t have an account? <Link href={SIGNUP_URL}>Sign up</Link>
             </FieldDescription>
           </Field>
         </FieldGroup>

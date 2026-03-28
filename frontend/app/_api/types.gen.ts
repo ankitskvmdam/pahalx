@@ -5,6 +5,36 @@ export type ClientOptions = {
 };
 
 /**
+ * Body_login_for_access_token_api_v1_auth_login_post
+ */
+export type BodyLoginForAccessTokenApiV1AuthLoginPost = {
+    /**
+     * Grant Type
+     */
+    grant_type?: string | null;
+    /**
+     * Username
+     */
+    username: string;
+    /**
+     * Password
+     */
+    password: string;
+    /**
+     * Scope
+     */
+    scope?: string;
+    /**
+     * Client Id
+     */
+    client_id?: string | null;
+    /**
+     * Client Secret
+     */
+    client_secret?: string | null;
+};
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -30,6 +60,20 @@ export type User = {
      * Name
      */
     name: string;
+};
+
+/**
+ * UserAccessToken
+ */
+export type UserAccessToken = {
+    /**
+     * Access Token
+     */
+    access_token: string;
+    /**
+     * Token Type
+     */
+    token_type: string;
 };
 
 /**
@@ -103,70 +147,43 @@ export type CreateUserApiV1AuthUsersPostResponses = {
 
 export type CreateUserApiV1AuthUsersPostResponse = CreateUserApiV1AuthUsersPostResponses[keyof CreateUserApiV1AuthUsersPostResponses];
 
-export type CheckUsernameExistsApiV1AuthUsersUsernameGetData = {
-    body?: never;
-    path: {
-        /**
-         * Username
-         */
-        username: string;
-    };
-    query?: never;
-    url: '/api/v1/auth/users/{username}';
-};
-
-export type CheckUsernameExistsApiV1AuthUsersUsernameGetErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CheckUsernameExistsApiV1AuthUsersUsernameGetError = CheckUsernameExistsApiV1AuthUsersUsernameGetErrors[keyof CheckUsernameExistsApiV1AuthUsersUsernameGetErrors];
-
-export type CheckUsernameExistsApiV1AuthUsersUsernameGetResponses = {
-    /**
-     * Response Check Username Exists Api V1 Auth Users  Username  Get
-     *
-     * Successful Response
-     */
-    200: boolean;
-};
-
-export type CheckUsernameExistsApiV1AuthUsersUsernameGetResponse = CheckUsernameExistsApiV1AuthUsersUsernameGetResponses[keyof CheckUsernameExistsApiV1AuthUsersUsernameGetResponses];
-
-export type LoginApiV1AuthLoginPostData = {
-    body?: never;
+export type LoginForAccessTokenApiV1AuthLoginPostData = {
+    body: BodyLoginForAccessTokenApiV1AuthLoginPost;
     path?: never;
-    query: {
-        /**
-         * Username
-         */
-        username: string;
-        /**
-         * Password
-         */
-        password: string;
-    };
+    query?: never;
     url: '/api/v1/auth/login';
 };
 
-export type LoginApiV1AuthLoginPostErrors = {
+export type LoginForAccessTokenApiV1AuthLoginPostErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type LoginApiV1AuthLoginPostError = LoginApiV1AuthLoginPostErrors[keyof LoginApiV1AuthLoginPostErrors];
+export type LoginForAccessTokenApiV1AuthLoginPostError = LoginForAccessTokenApiV1AuthLoginPostErrors[keyof LoginForAccessTokenApiV1AuthLoginPostErrors];
 
-export type LoginApiV1AuthLoginPostResponses = {
+export type LoginForAccessTokenApiV1AuthLoginPostResponses = {
     /**
-     * Response Login Api V1 Auth Login Post
-     *
      * Successful Response
      */
-    200: boolean;
+    200: UserAccessToken;
 };
 
-export type LoginApiV1AuthLoginPostResponse = LoginApiV1AuthLoginPostResponses[keyof LoginApiV1AuthLoginPostResponses];
+export type LoginForAccessTokenApiV1AuthLoginPostResponse = LoginForAccessTokenApiV1AuthLoginPostResponses[keyof LoginForAccessTokenApiV1AuthLoginPostResponses];
+
+export type GetCurrentUserApiV1AuthUsersMeGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth/users/me';
+};
+
+export type GetCurrentUserApiV1AuthUsersMeGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type GetCurrentUserApiV1AuthUsersMeGetResponse = GetCurrentUserApiV1AuthUsersMeGetResponses[keyof GetCurrentUserApiV1AuthUsersMeGetResponses];

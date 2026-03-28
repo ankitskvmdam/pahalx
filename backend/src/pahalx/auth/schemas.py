@@ -11,3 +11,8 @@ class User(BaseModel):
     id: str
     username: str
     name: str
+
+
+class UserAccessToken(BaseModel):
+    access_token: str
+    token_type: str

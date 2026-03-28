@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PahalX",
-  description: "The only app you need for everything.",
+  description:
+    "Pahal means 'the first step', and an 'x' at the end is to make it modern!. The purpose of this project is to build fundational knowledge around working with AI project.",
 };
 
 export default function RootLayout({

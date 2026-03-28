@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
-import { loginApiV1AuthLoginPost } from "@/app/_api";
+import { loginForAccessTokenApiV1AuthLoginPost } from "@/app/_api";
 import { AuthContainer } from "../component";
 import { LoginForm } from "./form";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { setAccessToken } from "@/app/_utils/storage";
+import { BASE_DASHBOARD_URL } from "@/app/_contants/routes";
 
 export default function Page() {
   const [error, setError] = React.useState<null | {
@@ -12,6 +14,7 @@ export default function Page() {
   }>(null);
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const router = useRouter();
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,19 +23,20 @@ export default function Page() {
       setIsSubmitting(true);
 
       const form = e.currentTarget;
-      const username = form["username"].value
-      const password = form["password"].value
+      const username = form["username"].value;
+      const password = form["password"].value;
 
-
-      const response = await loginApiV1AuthLoginPost({
-        query: {
+      const response = await loginForAccessTokenApiV1AuthLoginPost({
+        body: {
           username,
           password,
         },
       });
 
       if (response.data) {
-        redirect("/dashboard");
+        setAccessToken(response.data.access_token);
+        router.push(BASE_DASHBOARD_URL);
+        return;
       }
 
       setError({
@@ -41,7 +45,7 @@ export default function Page() {
       });
       setIsSubmitting(false);
     },
-    [],
+    [router],
   );
 
   return (

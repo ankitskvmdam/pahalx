@@ -1,15 +1,26 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from pahalx.auth.models import UserModel
-from pahalx.auth.schemas import User, UserCreate
-from pahalx.auth.utils import get_password_hash, verify_password
+from pahalx.auth.schemas import User, UserAccessToken, UserCreate
+from pahalx.auth.utils import (
+    AuthErrorCode,
+    authenticate_user,
+    create_access_token,
+    get_password_hash,
+    verify_access_token,
+)
 from pahalx.database.database import get_db
 
 router = APIRouter(
     prefix="/v1/auth",
     tags=["auth"],
 )
+
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 @router.post("/users")
@@ -35,22 +46,34 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)) -> User:
     )
 
 
-@router.get("/users/{username}")
-def check_username_exists(username: str, db: Session = Depends(get_db)) -> bool:
-    db_user = db.query(UserModel).filter(UserModel.username == username).first()
-    return True if db_user else False
-
-
 @router.post("/login")
-def login(username: str, password: str, db: Session = Depends(get_db)) -> bool:
-    db_user = db.query(UserModel).filter(UserModel.username == username).first()
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
+def login_for_access_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    db: Session = Depends(get_db),
+) -> UserAccessToken:
 
-    is_valid_password = verify_password(password, str(db_user.password))
+    user = authenticate_user(db, form_data.username, form_data.password)
+    access_token = create_access_token({"sub": user.username})
 
-    if not is_valid_password:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+    return UserAccessToken(access_token=access_token, token_type="bearer")
 
-    # TODO: Send JWT token
-    return True
+
+@router.get("/users/me")
+def get_current_user(
+    token: str = Depends(oauth2_schema),
+    db: Session = Depends(get_db),
+) -> User:
+    payload = verify_access_token(token)
+    username = payload.get("sub")
+    user = db.query(UserModel).filter(UserModel.username == username).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "msg": "User not found",
+                "code": AuthErrorCode.USER_NOT_FOUND.value,
+            },
+        )
+
+    return User(username=str(user.username), name=str(user.name), id=str(user.id))

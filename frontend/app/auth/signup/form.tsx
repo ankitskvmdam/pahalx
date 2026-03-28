@@ -12,6 +12,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon, LoaderCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { LOGIN_URL } from "@/app/_contants/routes";
 
 export type TSignupFormProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -41,15 +42,33 @@ export function SignupForm(props: TSignupFormProps) {
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="fullname">Name</FieldLabel>
-            <Input disabled={isSubmitting} id="fullname" type="text" placeholder="Full name" required />
+            <Input
+              disabled={isSubmitting}
+              id="fullname"
+              type="text"
+              placeholder="Full name"
+              required
+            />
           </Field>
           <Field>
             <FieldLabel htmlFor="username">Username</FieldLabel>
-            <Input disabled={isSubmitting} id="username" type="text" placeholder="Username" required />
+            <Input
+              disabled={isSubmitting}
+              id="username"
+              type="text"
+              placeholder="Username"
+              required
+            />
           </Field>
           <Field>
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Input disabled={isSubmitting} id="password" type="password" placeholder="*********" required />
+            <Input
+              disabled={isSubmitting}
+              id="password"
+              type="password"
+              placeholder="*********"
+              required
+            />
           </Field>
           <Field>
             <Button disabled={isSubmitting} type="submit">
@@ -59,7 +78,7 @@ export function SignupForm(props: TSignupFormProps) {
               />
             </Button>
             <FieldDescription className="text-center">
-              Already have an account? <Link href="/auth/login">Log in</Link>
+              Already have an account? <Link href={LOGIN_URL}>Log in</Link>
             </FieldDescription>
           </Field>
         </FieldGroup>
