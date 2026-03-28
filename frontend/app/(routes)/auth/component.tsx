@@ -7,7 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Dithering, GrainGradient, SimplexNoise } from "@paper-design/shaders-react";
+import { Dithering } from "@paper-design/shaders-react";
+import { LogoWithName } from "@/components/custom/logo-with-name";
+
+function Navbar() {
+  return (
+    <nav className="p-2 bg-background w-screen z-1 flex justify-between">
+      <LogoWithName />
+    </nav>
+  );
+}
 
 export type TAuthContainerProps = React.HTMLProps<HTMLDivElement>;
 
@@ -17,13 +26,10 @@ export function AuthContainer(props: TAuthContainerProps) {
   return (
     <div
       {...rest}
-      className={cn(
-        "flex flex-col min-h-svh w-full items-center justify-center p-6 md:p-10 relative",
-        className,
-      )}
+      className={cn("flex flex-col min-h-svh w-full relative", className)}
     >
-      <div className="w-full max-w-sm z-10">
-        <h1 className="text-2xl text-center font-bold mb-4">PahalX</h1>
+      <Navbar />
+      <div className="w-screen flex-1 z-10 flex p-6 items-center justify-center md:p-10">
         <div className="w-full max-w-sm">{children}</div>
       </div>
       <div className="absolute inset-0">

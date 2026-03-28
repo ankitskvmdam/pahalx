@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Open_Sans, Courier_Prime, Inter } from "next/font/google";
 import "./global.css";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const monoSpace = Courier_Prime({
+  variable: "--font-mono",
+  weight: "700",
 });
 
 export const metadata: Metadata = {
@@ -32,12 +32,15 @@ export default function RootLayout({
       className={cn(
         "h-full",
         "antialiased",
-        geistSans.variable,
-        geistMono.variable,
+        openSans.variable,
+        monoSpace.variable,
         "font-sans",
         inter.variable,
       )}
     >
+      <head>
+        <link rel="icon" href="/pahal_logo_small.svg" type="image/svg+xml" />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
