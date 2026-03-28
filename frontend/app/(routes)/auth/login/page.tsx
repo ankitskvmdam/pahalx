@@ -6,6 +6,7 @@ import { LoginForm } from "./form";
 import { useRouter } from "next/navigation";
 import { setAccessToken } from "@/app/_utils/storage";
 import { BASE_DASHBOARD_URL } from "@/app/_contants/routes";
+import { useAppStore } from "@/app/_store/app-store";
 
 export default function Page() {
   const [error, setError] = React.useState<null | {
@@ -15,6 +16,9 @@ export default function Page() {
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const router = useRouter();
+  const { setAuthState } = useAppStore((store) => ({
+    setAuthState: store.setAuthState,
+  }));
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +39,7 @@ export default function Page() {
 
       if (response.data) {
         setAccessToken(response.data.access_token);
+        setAuthState("authenticated");
         router.push(BASE_DASHBOARD_URL);
         return;
       }
@@ -45,7 +50,7 @@ export default function Page() {
       });
       setIsSubmitting(false);
     },
-    [router],
+    [router, setAuthState],
   );
 
   return (

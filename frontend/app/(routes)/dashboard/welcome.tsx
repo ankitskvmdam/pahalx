@@ -1,11 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { GrainGradient } from "@paper-design/shaders-react";
-import { useLogout } from "../_hooks/auth";
+import { useLogout } from "@/app/_hooks/auth";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function Page() {
+export function DashboardWelcome() {
   const { handleLogout, isSubmitting } = useLogout();
 
   return (
@@ -13,7 +13,7 @@ export default function Page() {
       <div className="space-y-5 relative z-10 px-8 py-8 rounded-md bg-white/30 backdrop-blur-sm">
         <h1 className="text-5xl font-bold mb-4">Welcome to PahalX</h1>
         <div className="w-full max-w-sm text-black">
-          This website is under construction. We will be back soon.
+          We will shortly add the chat feature.
         </div>
         <div>
           <Button disabled={isSubmitting} onClick={handleLogout}>
