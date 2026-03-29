@@ -7,11 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dithering,
-  MeshGradient,
-  SimplexNoise,
-} from "@paper-design/shaders-react";
+import { Dithering, MeshGradient } from "@paper-design/shaders-react";
 import { LogoWithName } from "@/components/custom/logo-with-name";
 
 function Navbar() {
