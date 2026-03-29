@@ -7,12 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Dithering } from "@paper-design/shaders-react";
+import {
+  Dithering,
+  MeshGradient,
+  SimplexNoise,
+} from "@paper-design/shaders-react";
 import { LogoWithName } from "@/components/custom/logo-with-name";
 
 function Navbar() {
   return (
-    <nav className="p-2 bg-background w-screen z-1 flex justify-between">
+    <nav className="p-2 w-screen z-1 flex justify-between">
       <LogoWithName />
     </nav>
   );
@@ -33,12 +37,24 @@ export function AuthContainer(props: TAuthContainerProps) {
         <div className="w-full max-w-sm">{children}</div>
       </div>
       <div className="absolute inset-0">
+        <MeshGradient
+          width="100%"
+          height="100%"
+          colors={["#F8FAFF", "#E0F2FE", "#E0EAFF", "#FFFBBD"]}
+          distortion={0.8}
+          swirl={0.1}
+          grainMixer={0}
+          grainOverlay={0}
+          speed={0.3}
+        />
+      </div>
+      <div className="absolute inset-0 opacity-10">
         <Dithering
           width="100%"
           height="100%"
           shape="warp"
           colorBack="#ffffff"
-          colorFront="#aaaaaa"
+          colorFront="#3F220F"
           type="4x4"
           size={2.5}
           speed={0.1}
