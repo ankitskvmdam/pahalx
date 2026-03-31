@@ -1,6 +1,6 @@
 "use client";
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./_sidebar";
 import { DashboardMain } from "./main";
 import React from "react";

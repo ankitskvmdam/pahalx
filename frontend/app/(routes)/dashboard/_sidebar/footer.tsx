@@ -8,10 +8,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { User2, MirrorRectangularIcon } from "lucide-react";
 import { DashboardSidebarFooterDropdownContent } from "./footer-dropdown-content";
 import { useAppStore } from "@/app/_store/app-store";
+import { DashboardSidebarFooterCollapseSidebar } from "./footer-collapse-sidebar";
 
 export function DashboardSidebarFooter() {
   const { user } = useAppStore((store) => ({
@@ -27,7 +29,6 @@ export function DashboardSidebarFooter() {
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
-            <DropdownMenuSeparator />
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 size="lg"
@@ -48,6 +49,8 @@ export function DashboardSidebarFooter() {
             <DashboardSidebarFooterDropdownContent />
           </DropdownMenu>
         </SidebarMenuItem>
+        <SidebarSeparator className="my-2" />
+        <DashboardSidebarFooterCollapseSidebar />
       </SidebarMenu>
     </SidebarFooter>
   );
