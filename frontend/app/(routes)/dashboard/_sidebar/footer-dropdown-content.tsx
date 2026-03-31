@@ -1,3 +1,4 @@
+import { ACCOUNT_URL } from "@/app/_contants/routes";
 import { useLogout } from "@/app/_hooks/auth";
 import {
   DropdownMenuContent,
@@ -7,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { User, LogOut } from "lucide-react";
+import Link from "next/link";
 
 export function DashboardSidebarFooterDropdownContent() {
   const { handleLogout } = useLogout();
@@ -14,10 +16,12 @@ export function DashboardSidebarFooterDropdownContent() {
   return (
     <DropdownMenuContent>
       <DropdownMenuGroup>
-        <DropdownMenuItem>
-          <User />
-          Account
-        </DropdownMenuItem>
+        <Link href={ACCOUNT_URL}>
+          <DropdownMenuItem>
+            <User />
+            Account
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuItem onClick={handleLogout}>

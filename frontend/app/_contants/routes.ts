@@ -6,3 +6,4 @@ export const SIGNUP_URL = `${BASE_AUTH_URL}/signup`;
 
 export const BASE_DASHBOARD_URL = "/dashboard";
 export const CHAT_URL = `${BASE_DASHBOARD_URL}/c`;
+export const ACCOUNT_URL = `${BASE_DASHBOARD_URL}/account`;

@@ -1,17 +1,16 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
+from pahalx.auth.check_user_authentication import check_user_authentication
 from pahalx.auth.models import UserModel
 from pahalx.auth.schemas import User, UserAccessToken, UserCreate
 from pahalx.auth.utils import (
-    AuthErrorCode,
     authenticate_user,
     create_access_token,
     get_password_hash,
-    verify_access_token,
 )
 from pahalx.database.database import get_db
 
@@ -19,8 +18,6 @@ router = APIRouter(
     prefix="/v1/auth",
     tags=["auth"],
 )
-
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 @router.post("/users")
@@ -60,20 +57,6 @@ def login_for_access_token(
 
 @router.get("/users/me")
 def get_current_user(
-    token: str = Depends(oauth2_schema),
-    db: Session = Depends(get_db),
+    user: User = Depends(check_user_authentication),
 ) -> User:
-    payload = verify_access_token(token)
-    username = payload.get("sub")
-    user = db.query(UserModel).filter(UserModel.username == username).first()
-
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail={
-                "msg": "User not found",
-                "code": AuthErrorCode.USER_NOT_FOUND.value,
-            },
-        )
-
-    return User(username=str(user.username), name=str(user.name), id=str(user.id))
+    return user
