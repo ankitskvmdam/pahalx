@@ -28,3 +28,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES") 
 AI_ENDPOINT: str = (
     os.getenv("AI_ENDPOINT") if os.getenv("AI_ENDPOINT") else "AI_ENDPOINT_NOT_SET"
 )
+
+LM_STUDIO_API_KEY: str = (
+    os.getenv("LM_STUDIO_API_KEY")
+    if os.getenv("LM_STUDIO_API_KEY")
+    else "LM_STUDIO_API_KEY_NOT_SET"
+)

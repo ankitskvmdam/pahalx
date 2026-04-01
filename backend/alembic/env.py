@@ -3,6 +3,8 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
+from pahalx.auth.models import UserModel  # noqa: F401
+from pahalx.chat.models import ChatModel, MessageModel  # noqa: F401
 from pahalx.config import DB_URL
 from pahalx.database.database import Base
 
