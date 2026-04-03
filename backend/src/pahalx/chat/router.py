@@ -12,6 +12,7 @@ from pahalx.chat.utils import (
     get_chat,
     message_model_messages_to_payload_message,
     message_model_to_message,
+    pahalx_get_chat_title,
     pahalx_llm_response_generator,
 )
 from pahalx.database.database import get_db
@@ -23,8 +24,8 @@ router = APIRouter(
 
 
 @router.post("/")
-def create_chat(
-    title: str,
+async def create_chat(
+    user_message: str,
     system_prompt: str = "Keep message small and professional.",
     user=Depends(check_user_authentication),
     db: Session = Depends(get_db),
@@ -33,9 +34,11 @@ def create_chat(
     Create a new chat.
 
     """
+    title = await pahalx_get_chat_title(user_message=user_message)
+
     now = datetime.now()
     new_chat = ChatModel(
-        title=title,
+        title=title if title != "" else user_message,
         user_id=user.id,
         created_at=now,
         updated_at=now,
@@ -63,6 +66,26 @@ def create_chat(
     )
 
 
+@router.delete("/{chat_id}")
+def delete_chat(
+    chat_id: int, user=Depends(check_user_authentication), db: Session = Depends(get_db)
+):
+    chat = (
+        db.query(ChatModel)
+        .filter(ChatModel.id == chat_id, ChatModel.user_id == user.id)
+        .first()
+    )
+
+    if not chat:
+        return {"success": False, "message": "Chat not found"}
+
+    if chat:
+        db.delete(chat)
+    db.commit()
+
+    return {"success": True}
+
+
 @router.get("/all")
 def get_chats(
     user=Depends(check_user_authentication), db: Session = Depends(get_db)
@@ -83,7 +106,7 @@ def get_chats(
 @router.get("/{chat_id}/messages")
 def get_chat_messages(
     chat_id: int, user=Depends(check_user_authentication), db: Session = Depends(get_db)
-) -> List:
+) -> list[MessageGet]:
     # To check whether user is authorize to access the chat messages
     get_chat(chat_id, user, db)
 

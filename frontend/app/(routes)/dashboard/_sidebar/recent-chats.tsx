@@ -11,41 +11,34 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useToggleSidebar } from "./use-toggle-sidebar";
+import { useGetChatsApiV1ChatAllGet } from "@/app/_api/chat/chat";
 
 export function DashboardSidebarRecentChats() {
   const { state } = useSidebar();
   const { toggleOnClick } = useToggleSidebar();
+  const { data, error, isLoading } = useGetChatsApiV1ChatAllGet();
+
+  console.log("data", data);
+
+  if (isLoading || error || !data) return null;
 
   return (
     <SidebarGroup className={cn(state === "collapsed" && "hidden")}>
       <SidebarGroupLabel>Recent Chats</SidebarGroupLabel>
       <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <Link
-              href={`${CHAT_URL}?${CHAT_ID_QUERY_PARAM}=an-example-chat-root`}
-              onClick={toggleOnClick}
-            >
-              An example chat 01
-            </Link>
-          </SidebarMenuButton>
-          <SidebarMenuButton asChild>
-            <Link
-              href={`${CHAT_URL}?${CHAT_ID_QUERY_PARAM}=travel-itinerary-chat-room`}
-              onClick={toggleOnClick}
-            >
-              Give me the travel itinerary
-            </Link>
-          </SidebarMenuButton>
-          <SidebarMenuButton asChild>
-            <Link
-              href={`${CHAT_URL}?${CHAT_ID_QUERY_PARAM}=interesting-chat-room`}
-              onClick={toggleOnClick}
-            >
-              Interesting Chat
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        {data.data.map((item) => (
+          <SidebarMenuItem key={item.id}>
+            <SidebarMenuButton asChild>
+              <Link
+                href={`${CHAT_URL}?${CHAT_ID_QUERY_PARAM}=${item.id}`}
+                onClick={toggleOnClick}
+                className="text-ellipsis whitespace-nowrap inline-block"
+              >
+                {item.title}
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
       </SidebarMenu>
     </SidebarGroup>
   );

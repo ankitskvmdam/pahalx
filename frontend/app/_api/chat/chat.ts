@@ -164,6 +164,121 @@ export const useCreateChatApiV1ChatPost = <
   );
 };
 /**
+ * @summary Delete Chat
+ */
+export type deleteChatApiV1ChatChatIdDeleteResponse200 = {
+  data: unknown;
+  status: 200;
+};
+
+export type deleteChatApiV1ChatChatIdDeleteResponse422 = {
+  data: HTTPValidationError;
+  status: 422;
+};
+
+export type deleteChatApiV1ChatChatIdDeleteResponseSuccess =
+  deleteChatApiV1ChatChatIdDeleteResponse200 & {
+    headers: Headers;
+  };
+export type deleteChatApiV1ChatChatIdDeleteResponseError =
+  deleteChatApiV1ChatChatIdDeleteResponse422 & {
+    headers: Headers;
+  };
+
+export type deleteChatApiV1ChatChatIdDeleteResponse =
+  | deleteChatApiV1ChatChatIdDeleteResponseSuccess
+  | deleteChatApiV1ChatChatIdDeleteResponseError;
+
+export const getDeleteChatApiV1ChatChatIdDeleteUrl = (chatId: number) => {
+  return `/api/v1/chat/${chatId}`;
+};
+
+export const deleteChatApiV1ChatChatIdDelete = async (
+  chatId: number,
+  options?: RequestInit
+): Promise<deleteChatApiV1ChatChatIdDeleteResponse> => {
+  return queryFetch<deleteChatApiV1ChatChatIdDeleteResponse>(
+    getDeleteChatApiV1ChatChatIdDeleteUrl(chatId),
+    {
+      ...options,
+      method: "DELETE",
+    }
+  );
+};
+
+export const getDeleteChatApiV1ChatChatIdDeleteMutationOptions = <
+  TError = HTTPValidationError,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>,
+    TError,
+    { chatId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof queryFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>,
+  TError,
+  { chatId: number },
+  TContext
+> => {
+  const mutationKey = ["deleteChatApiV1ChatChatIdDelete"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>,
+    { chatId: number }
+  > = (props) => {
+    const { chatId } = props ?? {};
+
+    return deleteChatApiV1ChatChatIdDelete(chatId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteChatApiV1ChatChatIdDeleteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>
+>;
+
+export type DeleteChatApiV1ChatChatIdDeleteMutationError = HTTPValidationError;
+
+/**
+ * @summary Delete Chat
+ */
+export const useDeleteChatApiV1ChatChatIdDelete = <
+  TError = HTTPValidationError,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>,
+      TError,
+      { chatId: number },
+      TContext
+    >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>,
+  TError,
+  { chatId: number },
+  TContext
+> => {
+  return useMutation(
+    getDeleteChatApiV1ChatChatIdDeleteMutationOptions(options),
+    queryClient
+  );
+};
+/**
  * @summary Get Chats
  */
 export type getChatsApiV1ChatAllGetResponse200 = {
@@ -338,7 +453,7 @@ export function useGetChatsApiV1ChatAllGet<
  * @summary Get Chat Messages
  */
 export type getChatMessagesApiV1ChatChatIdMessagesGetResponse200 = {
-  data: unknown[];
+  data: MessageGet[];
   status: 200;
 };
 

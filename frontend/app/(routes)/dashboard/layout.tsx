@@ -40,7 +40,14 @@ export default function RootDashboardLayout(props: TRootDashbaordLayoutProps) {
 
   return (
     <div className="h-dvh w-screen flex bg-muted ">
-      <SidebarProvider>
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "20rem",
+            "--sidebar-width-mobile": "18rem",
+          } as unknown as React.CSSProperties
+        }
+      >
         <DashboardSidebar />
         <DashboardMain>{children}</DashboardMain>
       </SidebarProvider>

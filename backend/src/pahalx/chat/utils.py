@@ -100,3 +100,41 @@ async def pahalx_llm_response_generator(payload, chat_id, db: Session):
 
         db.add(ai_response_content)
         db.commit()
+
+
+async def pahalx_get_chat_title(user_message: str) -> str:
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {LM_STUDIO_API_KEY}",
+    }
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            f"{AI_ENDPOINT}/v1/chat/completions",
+            headers=headers,
+            json={
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": """You are a title generator.
+
+Rules:
+- Output only a short title (max 5 words)
+- No punctuation at the end
+- No quotes
+- No explanation or extra text
+- Use plain, natural wording
+
+Return only the title.""",
+                    },
+                    {"role": "user", "content": user_message},
+                ]
+            },
+        )
+
+    if response.status_code == 200:
+        data = response.json()
+        if "choices" in data and len(data["choices"]) > 0:
+            message = data["choices"][0].get("message", {})
+            return message.get("content", "").strip()
+    return user_message[:20]

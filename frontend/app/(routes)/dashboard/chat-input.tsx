@@ -6,19 +6,13 @@ import {
   InputGroupAddon,
   InputGroupButton,
 } from "@/components/ui/input-group";
-import { Paperclip, PlusIcon, SendIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { SendIcon } from "lucide-react";
+import { PahalXLogo } from "@/components/custom/logo";
 
 export default function ChatInput() {
   return (
     <div className="w-full flex justify-center p-4">
-      <div className="grid w-full max-w-md gap-6">
+      <div className="grid w-full max-w-3xl gap-6">
         <InputGroup className="bg-background">
           <TextareaAutosize
             data-slot="input-group-control"
@@ -26,21 +20,7 @@ export default function ChatInput() {
             placeholder="Ask anything..."
           />
           <InputGroupAddon align="block-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <InputGroupButton size="sm" className="-ml-1 -mb-1">
-                  <PlusIcon />
-                </InputGroupButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Paperclip />
-                    Attach File
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PahalXLogo className="fill-muted" />
             <InputGroupButton className="ml-auto -mr-1 -mb-1" size="sm">
               <SendIcon />
             </InputGroupButton>

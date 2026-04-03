@@ -64,7 +64,7 @@ export const getCreateUserApiV1AuthUsersPostUrl = () => {
 
 export const createUserApiV1AuthUsersPost = async (
   userCreate: UserCreate,
-  options?: RequestInit,
+  options?: RequestInit
 ): Promise<createUserApiV1AuthUsersPostResponse> => {
   return queryFetch<createUserApiV1AuthUsersPostResponse>(
     getCreateUserApiV1AuthUsersPostUrl(),
@@ -73,7 +73,7 @@ export const createUserApiV1AuthUsersPost = async (
       method: "POST",
       headers: { "Content-Type": "application/json", ...options?.headers },
       body: JSON.stringify(userCreate),
-    },
+    }
   );
 };
 
@@ -137,7 +137,7 @@ export const useCreateUserApiV1AuthUsersPost = <
     >;
     request?: SecondParameter<typeof queryFetch>;
   },
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseMutationResult<
   Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>,
   TError,
@@ -146,7 +146,7 @@ export const useCreateUserApiV1AuthUsersPost = <
 > => {
   return useMutation(
     getCreateUserApiV1AuthUsersPostMutationOptions(options),
-    queryClient,
+    queryClient
   );
 };
 /**
@@ -181,7 +181,7 @@ export const getLoginForAccessTokenApiV1AuthLoginPostUrl = () => {
 
 export const loginForAccessTokenApiV1AuthLoginPost = async (
   bodyLoginForAccessTokenApiV1AuthLoginPost: BodyLoginForAccessTokenApiV1AuthLoginPost,
-  options?: RequestInit,
+  options?: RequestInit
 ): Promise<loginForAccessTokenApiV1AuthLoginPostResponse> => {
   const formUrlEncoded = new URLSearchParams();
   if (
@@ -190,21 +190,21 @@ export const loginForAccessTokenApiV1AuthLoginPost = async (
   ) {
     formUrlEncoded.append(
       `grant_type`,
-      bodyLoginForAccessTokenApiV1AuthLoginPost.grant_type,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.grant_type
     );
   }
   formUrlEncoded.append(
     `username`,
-    bodyLoginForAccessTokenApiV1AuthLoginPost.username,
+    bodyLoginForAccessTokenApiV1AuthLoginPost.username
   );
   formUrlEncoded.append(
     `password`,
-    bodyLoginForAccessTokenApiV1AuthLoginPost.password,
+    bodyLoginForAccessTokenApiV1AuthLoginPost.password
   );
   if (bodyLoginForAccessTokenApiV1AuthLoginPost.scope !== undefined) {
     formUrlEncoded.append(
       `scope`,
-      bodyLoginForAccessTokenApiV1AuthLoginPost.scope,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.scope
     );
   }
   if (
@@ -213,7 +213,7 @@ export const loginForAccessTokenApiV1AuthLoginPost = async (
   ) {
     formUrlEncoded.append(
       `client_id`,
-      bodyLoginForAccessTokenApiV1AuthLoginPost.client_id,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.client_id
     );
   }
   if (
@@ -222,7 +222,7 @@ export const loginForAccessTokenApiV1AuthLoginPost = async (
   ) {
     formUrlEncoded.append(
       `client_secret`,
-      bodyLoginForAccessTokenApiV1AuthLoginPost.client_secret,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.client_secret
     );
   }
 
@@ -236,7 +236,7 @@ export const loginForAccessTokenApiV1AuthLoginPost = async (
         ...options?.headers,
       },
       body: formUrlEncoded,
-    },
+    }
   );
 };
 
@@ -302,7 +302,7 @@ export const useLoginForAccessTokenApiV1AuthLoginPost = <
     >;
     request?: SecondParameter<typeof queryFetch>;
   },
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseMutationResult<
   Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>,
   TError,
@@ -311,7 +311,7 @@ export const useLoginForAccessTokenApiV1AuthLoginPost = <
 > => {
   return useMutation(
     getLoginForAccessTokenApiV1AuthLoginPostMutationOptions(options),
-    queryClient,
+    queryClient
   );
 };
 /**
@@ -334,14 +334,14 @@ export const getGetCurrentUserApiV1AuthUsersMeGetUrl = () => {
 };
 
 export const getCurrentUserApiV1AuthUsersMeGet = async (
-  options?: RequestInit,
+  options?: RequestInit
 ): Promise<getCurrentUserApiV1AuthUsersMeGetResponse> => {
   return queryFetch<getCurrentUserApiV1AuthUsersMeGetResponse>(
     getGetCurrentUserApiV1AuthUsersMeGetUrl(),
     {
       ...options,
       method: "GET",
-    },
+    }
   );
 };
 
@@ -406,7 +406,7 @@ export function useGetCurrentUserApiV1AuthUsersMeGet<
       >;
     request?: SecondParameter<typeof queryFetch>;
   },
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 };
@@ -432,7 +432,7 @@ export function useGetCurrentUserApiV1AuthUsersMeGet<
       >;
     request?: SecondParameter<typeof queryFetch>;
   },
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 };
@@ -450,7 +450,7 @@ export function useGetCurrentUserApiV1AuthUsersMeGet<
     >;
     request?: SecondParameter<typeof queryFetch>;
   },
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 };
@@ -472,7 +472,7 @@ export function useGetCurrentUserApiV1AuthUsersMeGet<
     >;
     request?: SecondParameter<typeof queryFetch>;
   },
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
