@@ -38,7 +38,7 @@ export default function RootLayout({
         openSans.variable,
         monoSpace.variable,
         "font-sans",
-        inter.variable
+        inter.variable,
       )}
     >
       <head>

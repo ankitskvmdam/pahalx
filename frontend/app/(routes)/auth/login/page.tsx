@@ -31,28 +31,28 @@ export default function Page() {
       const username = form["username"].value;
       const password = form["password"].value;
 
-      const response = await login({
-        data: {
-          username,
-          password,
-        },
-      });
+      try {
+        const response = await login({
+          data: {
+            username,
+            password,
+          },
+        });
 
-      console.log("Response", response);
-
-      if (response.status === 200) {
-        setAccessToken(response.data.access_token);
-        setAuthState("authenticated");
-        router.push(BASE_DASHBOARD_URL);
-        return;
+        if (response.status === 200) {
+          setAccessToken(response.data.access_token);
+          setAuthState("authenticated");
+          router.push(BASE_DASHBOARD_URL);
+          return;
+        }
+      } catch {
+        setError({
+          title: "Login failed",
+          description: "Invalid username or password",
+        });
       }
-
-      setError({
-        title: "Login failed",
-        description: "Invalid username or password",
-      });
     },
-    [router, setAuthState, login]
+    [router, setAuthState, login],
   );
 
   return (

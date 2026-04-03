@@ -17,6 +17,7 @@ export function useIsUserAuthenticated() {
   const { data, error, isLoading } = useGetCurrentUserApiV1AuthUsersMeGet({
     query: {
       enabled: !!getAccessToken(),
+      retry: false,
     },
   });
 

@@ -6,6 +6,7 @@ import { SignupForm } from "./form";
 import { useCreateUserApiV1AuthUsersPost } from "@/app/_api/auth/auth";
 import { useRouter } from "next/navigation";
 import { LOGIN_URL } from "@/app/_contants/routes";
+import { isServerErrorResponse } from "@/app/_utils/fetch";
 
 export default function Page() {
   const [error, setError] = React.useState<null | {
@@ -27,31 +28,36 @@ export default function Page() {
       const password = form["password"].value;
       const name = form["fullname"].value;
 
-      const response = await createUser({
-        data: {
-          username,
-          password,
-          name,
-        },
-      });
-
-      if (response.status === 200) {
-        router.push(LOGIN_URL);
-      }
-
-      if (response.status !== 200 && response.data.detail) {
-        setError({
-          title: "Sign up failed",
-          description: response.data.detail as unknown as string,
+      try {
+        const response = await createUser({
+          data: {
+            username,
+            password,
+            name,
+          },
         });
-      } else {
-        setError({
-          title: "Sing up failed",
-          description: "Please check the form fields and try again.",
-        });
+
+        if (response.status === 200) {
+          router.push(LOGIN_URL);
+        }
+      } catch (error) {
+        if (isServerErrorResponse(error)) {
+          setError({
+            title: "Sign up failed",
+            description:
+              typeof error.detail === "string"
+                ? error.detail
+                : JSON.stringify(error.detail),
+          });
+        } else {
+          setError({
+            title: "Sing up failed",
+            description: "Please check the form fields and try again.",
+          });
+        }
       }
     },
-    [createUser, router]
+    [createUser, router],
   );
 
   return (
