@@ -45,5 +45,9 @@ export const queryFetch = async <T>(
   const response = await fetch(request);
   const data = await getBody<T>(response);
 
+  if (response.status !== 200 && response.status !== 201) {
+    throw data;
+  }
+
   return { status: response.status, data } as T;
 };
