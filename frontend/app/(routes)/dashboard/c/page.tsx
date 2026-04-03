@@ -2,7 +2,7 @@
 import { CHAT_ID_QUERY_PARAM } from "@/app/_contants/query-params";
 import { useSearchParams } from "next/navigation";
 import ChatInput from "../chat-input";
-import { useGetChatMessagesApiV1ChatChatIdMessagesGet } from "@/app/_api/chat/chat";
+import { useGetChatMessagesApiV1ChatChatIdMessagesGet } from "@/app/_api/client";
 import { RenderChatMessage } from "./render-chat-message";
 
 export default function ChatListPage() {

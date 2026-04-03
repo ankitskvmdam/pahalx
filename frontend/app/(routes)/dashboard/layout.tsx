@@ -7,7 +7,7 @@ import React from "react";
 import { useAppStore } from "@/app/_store/app-store";
 import { removeAccessToken } from "@/app/_utils/storage";
 import { LoaderCircle } from "lucide-react";
-import { useGetCurrentUserApiV1AuthUsersMeGet } from "@/app/_api/auth/auth";
+import { useGetCurrentUserApiV1AuthUsersMeGet } from "@/app/_api/client";
 
 type TRootDashbaordLayoutProps = {
   children: React.ReactNode;

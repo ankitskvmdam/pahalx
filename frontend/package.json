@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "prettier": "prettier . --write",
-    "orval": "orval && prettier app/_api/**/*.ts --write"
+    "orval": "orval"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.72",

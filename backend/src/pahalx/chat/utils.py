@@ -3,13 +3,13 @@ from datetime import datetime
 from typing import cast
 
 import httpx
-from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from pahalx.auth.schemas import User
 from pahalx.chat.models import ChatModel, MessageModel, MessageRole, MessageStatus
 from pahalx.chat.schemas import ChatGet, MessageGet
 from pahalx.config import AI_ENDPOINT, LM_STUDIO_API_KEY
+from pahalx.expection import ChatErrorCode, TypedHTTPException
 
 
 def chat_model_to_chat(chat: ChatModel) -> ChatGet:
@@ -28,7 +28,9 @@ def get_chat(chat_id: int, user: User, db: Session) -> ChatGet:
         .first()
     )
     if chat is None:
-        raise HTTPException(status_code=404, detail="Chat not found")
+        raise TypedHTTPException(
+            status_code=404, msg="Chat not found", code=ChatErrorCode.CHAT_NOT_FOUND
+        )
     return chat_model_to_chat(chat)
 
 

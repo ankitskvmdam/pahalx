@@ -1,6 +1,6 @@
 "use client";
-import ChatInput from "./chat-input";
 import { useAppStore } from "@/app/_store/app-store";
+import { NewChat } from "./new-chat";
 
 export default function Page() {
   const user = useAppStore((store) => store.user);
@@ -11,7 +11,7 @@ export default function Page() {
           Hi, {user?.name}!
         </h1>
         <p className="muted-foreground">What do you want to chat about?</p>
-        <ChatInput />
+        <NewChat />
       </div>
     </div>
   );

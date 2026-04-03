@@ -11,14 +11,13 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useToggleSidebar } from "./use-toggle-sidebar";
-import { useGetChatsApiV1ChatAllGet } from "@/app/_api/chat/chat";
+import { useGetChatsApiV1ChatAllGet } from "@/app/_api/client";
 
 export function DashboardSidebarRecentChats() {
   const { state } = useSidebar();
   const { toggleOnClick } = useToggleSidebar();
   const { data, error, isLoading } = useGetChatsApiV1ChatAllGet();
 
-  console.log("data", data);
 
   if (isLoading || error || !data) return null;
 

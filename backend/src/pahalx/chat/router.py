@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, cast
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
@@ -16,10 +16,17 @@ from pahalx.chat.utils import (
     pahalx_llm_response_generator,
 )
 from pahalx.database.database import get_db
+from pahalx.expection import (
+    AuthErrorCode,
+    ChatErrorCode,
+    TypedHTTPException,
+    TypedHTTPExceptionModel,
+)
 
 router = APIRouter(
     prefix="/v1/chat",
     tags=["chat"],
+    responses={401: {"model": TypedHTTPExceptionModel[AuthErrorCode]}},
 )
 
 
@@ -66,7 +73,9 @@ async def create_chat(
     )
 
 
-@router.delete("/{chat_id}")
+@router.delete(
+    "/{chat_id}", responses={404: {"model": TypedHTTPExceptionModel[ChatErrorCode]}}
+)
 def delete_chat(
     chat_id: int, user=Depends(check_user_authentication), db: Session = Depends(get_db)
 ):
@@ -77,10 +86,11 @@ def delete_chat(
     )
 
     if not chat:
-        return {"success": False, "message": "Chat not found"}
+        raise TypedHTTPException(
+            status_code=404, msg="Chat not found", code=ChatErrorCode.CHAT_NOT_FOUND
+        )
 
-    if chat:
-        db.delete(chat)
+    db.delete(chat)
     db.commit()
 
     return {"success": True}
@@ -121,7 +131,10 @@ def get_chat_messages(
     return [message_model_to_message(message) for message in messages]
 
 
-@router.get("/{chat_id}/messages/{message_id}")
+@router.get(
+    "/{chat_id}/messages/{message_id}",
+    responses={404: {"model": TypedHTTPExceptionModel[ChatErrorCode]}},
+)
 def get_chat_message(
     chat_id: int,
     message_id: int,
@@ -132,7 +145,11 @@ def get_chat_message(
     message = db.query(MessageModel).filter(MessageModel.id == message_id).first()
 
     if message is None:
-        raise HTTPException(status_code=404, detail="Message not found")
+        raise TypedHTTPException(
+            status_code=404,
+            msg="Message not found",
+            code=ChatErrorCode.MESSAGE_NOT_FOUND,
+        )
 
     return message_model_to_message(message)
 

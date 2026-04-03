@@ -31,7 +31,7 @@ const getHeaders = (headers?: HeadersInit): HeadersInit => {
 
 export const queryFetch = async <T>(
   url: string,
-  options: RequestInit,
+  options: RequestInit
 ): Promise<T> => {
   const requestUrl = getUrl(url);
   const requestHeaders = getHeaders(options.headers);

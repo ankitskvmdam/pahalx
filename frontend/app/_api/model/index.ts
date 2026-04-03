@@ -5,8 +5,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./authErrorCode";
 export * from "./bodyLoginForAccessTokenApiV1AuthLoginPost";
 export * from "./chatCreate";
+export * from "./chatErrorCode";
 export * from "./chatGet";
 export * from "./createChatApiV1ChatPostParams";
 export * from "./createPahalxResponseApiV1ChatChatChatIdResponsePostParams";
@@ -14,6 +16,10 @@ export * from "./hTTPValidationError";
 export * from "./messageGet";
 export * from "./messageRole";
 export * from "./messageStatus";
+export * from "./typedHTTPExceptionDetailsAuthErrorCode";
+export * from "./typedHTTPExceptionDetailsChatErrorCode";
+export * from "./typedHTTPExceptionModelAuthErrorCode";
+export * from "./typedHTTPExceptionModelChatErrorCode";
 export * from "./user";
 export * from "./userAccessToken";
 export * from "./userCreate";

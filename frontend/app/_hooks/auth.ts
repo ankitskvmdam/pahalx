@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useGetCurrentUserApiV1AuthUsersMeGet } from "@/app/_api/auth/auth";
+import { useGetCurrentUserApiV1AuthUsersMeGet } from "@/app/_api/client";
 import { getAccessToken, removeAccessToken } from "../_utils/storage";
 import { LOGIN_URL } from "../_contants/routes";
 import { useRouter } from "next/navigation";

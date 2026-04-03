@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
-import { useLoginForAccessTokenApiV1AuthLoginPost } from "@/app/_api/auth/auth";
+import {
+  LoginForAccessTokenApiV1AuthLoginPostMutationError,
+  LoginForAccessTokenApiV1AuthLoginPostMutationResult,
+  useLoginForAccessTokenApiV1AuthLoginPost,
+} from "@/app/_api/client";
 import { AuthContainer } from "../component";
 import { LoginForm } from "./form";
 import { useRouter } from "next/navigation";
@@ -9,18 +13,51 @@ import { BASE_DASHBOARD_URL } from "@/app/_contants/routes";
 import { useAppStore } from "@/app/_store/app-store";
 
 export default function Page() {
+  const { setAuthState } = useAppStore((store) => ({
+    setAuthState: store.setAuthState,
+  }));
+  const router = useRouter();
+
   const [error, setError] = React.useState<null | {
     title: string;
     description: string;
   }>(null);
 
-  const { mutateAsync: login, isPending } =
-    useLoginForAccessTokenApiV1AuthLoginPost();
+  const handleOnSuccess = React.useCallback(
+    (response: LoginForAccessTokenApiV1AuthLoginPostMutationResult) => {
+      setAccessToken(response.data.access_token);
+      setAuthState("authenticated");
+      router.push(BASE_DASHBOARD_URL);
+    },
+    [router, setAuthState]
+  );
 
-  const router = useRouter();
-  const { setAuthState } = useAppStore((store) => ({
-    setAuthState: store.setAuthState,
-  }));
+  const handleOnError = React.useCallback(
+    (error: LoginForAccessTokenApiV1AuthLoginPostMutationError) => {
+      if (!error || !error.detail || Array.isArray(error.detail)) {
+        setError({
+          title: "Login failed",
+          description: "An unknown error occurred.",
+        });
+        return;
+      }
+
+      setError({
+        title: "Login failed",
+        description: error.detail.msg,
+      });
+    },
+    []
+  );
+
+  const { mutate: login, isPending } = useLoginForAccessTokenApiV1AuthLoginPost(
+    {
+      mutation: {
+        onSuccess: handleOnSuccess,
+        onError: handleOnError,
+      },
+    }
+  );
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,28 +68,9 @@ export default function Page() {
       const username = form["username"].value;
       const password = form["password"].value;
 
-      try {
-        const response = await login({
-          data: {
-            username,
-            password,
-          },
-        });
-
-        if (response.status === 200) {
-          setAccessToken(response.data.access_token);
-          setAuthState("authenticated");
-          router.push(BASE_DASHBOARD_URL);
-          return;
-        }
-      } catch {
-        setError({
-          title: "Login failed",
-          description: "Invalid username or password",
-        });
-      }
+      login({ data: { username, password } });
     },
-    [router, setAuthState, login],
+    [login]
   );
 
   return (

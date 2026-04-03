@@ -21,17 +21,503 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  BodyLoginForAccessTokenApiV1AuthLoginPost,
   ChatCreate,
   ChatGet,
   CreateChatApiV1ChatPostParams,
   CreatePahalxResponseApiV1ChatChatChatIdResponsePostParams,
   HTTPValidationError,
   MessageGet,
-} from "../model";
+  TypedHTTPExceptionModelAuthErrorCode,
+  TypedHTTPExceptionModelChatErrorCode,
+  User,
+  UserAccessToken,
+  UserCreate,
+} from "./model";
 
-import { queryFetch } from "../../query-fetch";
+import { queryFetch } from "../query-fetch";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+/**
+ * @summary Create User
+ */
+export type createUserApiV1AuthUsersPostResponse200 = {
+  data: User;
+  status: 200;
+};
+
+export type createUserApiV1AuthUsersPostResponse400 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 400;
+};
+
+export type createUserApiV1AuthUsersPostResponse422 = {
+  data: HTTPValidationError;
+  status: 422;
+};
+
+export type createUserApiV1AuthUsersPostResponseSuccess =
+  createUserApiV1AuthUsersPostResponse200 & {
+    headers: Headers;
+  };
+export type createUserApiV1AuthUsersPostResponseError = (
+  | createUserApiV1AuthUsersPostResponse400
+  | createUserApiV1AuthUsersPostResponse422
+) & {
+  headers: Headers;
+};
+
+export const getCreateUserApiV1AuthUsersPostUrl = () => {
+  return `/api/v1/auth/users`;
+};
+
+export const createUserApiV1AuthUsersPost = async (
+  userCreate: UserCreate,
+  options?: RequestInit
+): Promise<createUserApiV1AuthUsersPostResponseSuccess> => {
+  return queryFetch<createUserApiV1AuthUsersPostResponseSuccess>(
+    getCreateUserApiV1AuthUsersPostUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(userCreate),
+    }
+  );
+};
+
+export const getCreateUserApiV1AuthUsersPostMutationOptions = <
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>,
+    TError,
+    { data: UserCreate },
+    TContext
+  >;
+  request?: SecondParameter<typeof queryFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>,
+  TError,
+  { data: UserCreate },
+  TContext
+> => {
+  const mutationKey = ["createUserApiV1AuthUsersPost"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>,
+    { data: UserCreate }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createUserApiV1AuthUsersPost(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateUserApiV1AuthUsersPostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>
+>;
+export type CreateUserApiV1AuthUsersPostMutationBody = UserCreate;
+export type CreateUserApiV1AuthUsersPostMutationError =
+  | TypedHTTPExceptionModelAuthErrorCode
+  | HTTPValidationError;
+
+/**
+ * @summary Create User
+ */
+export const useCreateUserApiV1AuthUsersPost = <
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>,
+      TError,
+      { data: UserCreate },
+      TContext
+    >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof createUserApiV1AuthUsersPost>>,
+  TError,
+  { data: UserCreate },
+  TContext
+> => {
+  return useMutation(
+    getCreateUserApiV1AuthUsersPostMutationOptions(options),
+    queryClient
+  );
+};
+
+/**
+ * @summary Login For Access Token
+ */
+export type loginForAccessTokenApiV1AuthLoginPostResponse200 = {
+  data: UserAccessToken;
+  status: 200;
+};
+
+export type loginForAccessTokenApiV1AuthLoginPostResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
+export type loginForAccessTokenApiV1AuthLoginPostResponse404 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 404;
+};
+
+export type loginForAccessTokenApiV1AuthLoginPostResponse422 = {
+  data: HTTPValidationError;
+  status: 422;
+};
+
+export type loginForAccessTokenApiV1AuthLoginPostResponseSuccess =
+  loginForAccessTokenApiV1AuthLoginPostResponse200 & {
+    headers: Headers;
+  };
+export type loginForAccessTokenApiV1AuthLoginPostResponseError = (
+  | loginForAccessTokenApiV1AuthLoginPostResponse401
+  | loginForAccessTokenApiV1AuthLoginPostResponse404
+  | loginForAccessTokenApiV1AuthLoginPostResponse422
+) & {
+  headers: Headers;
+};
+
+export const getLoginForAccessTokenApiV1AuthLoginPostUrl = () => {
+  return `/api/v1/auth/login`;
+};
+
+export const loginForAccessTokenApiV1AuthLoginPost = async (
+  bodyLoginForAccessTokenApiV1AuthLoginPost: BodyLoginForAccessTokenApiV1AuthLoginPost,
+  options?: RequestInit
+): Promise<loginForAccessTokenApiV1AuthLoginPostResponseSuccess> => {
+  const formUrlEncoded = new URLSearchParams();
+  if (
+    bodyLoginForAccessTokenApiV1AuthLoginPost.grant_type !== undefined &&
+    bodyLoginForAccessTokenApiV1AuthLoginPost.grant_type !== null
+  ) {
+    formUrlEncoded.append(
+      `grant_type`,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.grant_type
+    );
+  }
+  formUrlEncoded.append(
+    `username`,
+    bodyLoginForAccessTokenApiV1AuthLoginPost.username
+  );
+  formUrlEncoded.append(
+    `password`,
+    bodyLoginForAccessTokenApiV1AuthLoginPost.password
+  );
+  if (bodyLoginForAccessTokenApiV1AuthLoginPost.scope !== undefined) {
+    formUrlEncoded.append(
+      `scope`,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.scope
+    );
+  }
+  if (
+    bodyLoginForAccessTokenApiV1AuthLoginPost.client_id !== undefined &&
+    bodyLoginForAccessTokenApiV1AuthLoginPost.client_id !== null
+  ) {
+    formUrlEncoded.append(
+      `client_id`,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.client_id
+    );
+  }
+  if (
+    bodyLoginForAccessTokenApiV1AuthLoginPost.client_secret !== undefined &&
+    bodyLoginForAccessTokenApiV1AuthLoginPost.client_secret !== null
+  ) {
+    formUrlEncoded.append(
+      `client_secret`,
+      bodyLoginForAccessTokenApiV1AuthLoginPost.client_secret
+    );
+  }
+
+  return queryFetch<loginForAccessTokenApiV1AuthLoginPostResponseSuccess>(
+    getLoginForAccessTokenApiV1AuthLoginPostUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        ...options?.headers,
+      },
+      body: formUrlEncoded,
+    }
+  );
+};
+
+export const getLoginForAccessTokenApiV1AuthLoginPostMutationOptions = <
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>,
+    TError,
+    { data: BodyLoginForAccessTokenApiV1AuthLoginPost },
+    TContext
+  >;
+  request?: SecondParameter<typeof queryFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>,
+  TError,
+  { data: BodyLoginForAccessTokenApiV1AuthLoginPost },
+  TContext
+> => {
+  const mutationKey = ["loginForAccessTokenApiV1AuthLoginPost"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>,
+    { data: BodyLoginForAccessTokenApiV1AuthLoginPost }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return loginForAccessTokenApiV1AuthLoginPost(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type LoginForAccessTokenApiV1AuthLoginPostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>
+>;
+export type LoginForAccessTokenApiV1AuthLoginPostMutationBody =
+  BodyLoginForAccessTokenApiV1AuthLoginPost;
+export type LoginForAccessTokenApiV1AuthLoginPostMutationError =
+  | TypedHTTPExceptionModelAuthErrorCode
+  | HTTPValidationError;
+
+/**
+ * @summary Login For Access Token
+ */
+export const useLoginForAccessTokenApiV1AuthLoginPost = <
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>,
+      TError,
+      { data: BodyLoginForAccessTokenApiV1AuthLoginPost },
+      TContext
+    >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof loginForAccessTokenApiV1AuthLoginPost>>,
+  TError,
+  { data: BodyLoginForAccessTokenApiV1AuthLoginPost },
+  TContext
+> => {
+  return useMutation(
+    getLoginForAccessTokenApiV1AuthLoginPostMutationOptions(options),
+    queryClient
+  );
+};
+
+/**
+ * @summary Get Current User
+ */
+export type getCurrentUserApiV1AuthUsersMeGetResponse200 = {
+  data: User;
+  status: 200;
+};
+
+export type getCurrentUserApiV1AuthUsersMeGetResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
+export type getCurrentUserApiV1AuthUsersMeGetResponseSuccess =
+  getCurrentUserApiV1AuthUsersMeGetResponse200 & {
+    headers: Headers;
+  };
+export type getCurrentUserApiV1AuthUsersMeGetResponseError =
+  getCurrentUserApiV1AuthUsersMeGetResponse401 & {
+    headers: Headers;
+  };
+
+export const getGetCurrentUserApiV1AuthUsersMeGetUrl = () => {
+  return `/api/v1/auth/users/me`;
+};
+
+export const getCurrentUserApiV1AuthUsersMeGet = async (
+  options?: RequestInit
+): Promise<getCurrentUserApiV1AuthUsersMeGetResponseSuccess> => {
+  return queryFetch<getCurrentUserApiV1AuthUsersMeGetResponseSuccess>(
+    getGetCurrentUserApiV1AuthUsersMeGetUrl(),
+    {
+      ...options,
+      method: "GET",
+    }
+  );
+};
+
+export const getGetCurrentUserApiV1AuthUsersMeGetQueryKey = () => {
+  return [`/api/v1/auth/users/me`] as const;
+};
+
+export const getGetCurrentUserApiV1AuthUsersMeGetQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof queryFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCurrentUserApiV1AuthUsersMeGetQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>
+  > = ({ signal }) =>
+    getCurrentUserApiV1AuthUsersMeGet({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetCurrentUserApiV1AuthUsersMeGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>
+>;
+export type GetCurrentUserApiV1AuthUsersMeGetQueryError =
+  TypedHTTPExceptionModelAuthErrorCode;
+
+export function useGetCurrentUserApiV1AuthUsersMeGet<
+  TData = Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentUserApiV1AuthUsersMeGet<
+  TData = Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetCurrentUserApiV1AuthUsersMeGet<
+  TData = Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Current User
+ */
+
+export function useGetCurrentUserApiV1AuthUsersMeGet<
+  TData = Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getCurrentUserApiV1AuthUsersMeGet>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof queryFetch>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions =
+    getGetCurrentUserApiV1AuthUsersMeGetQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * Create a new chat.
@@ -40,6 +526,11 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 export type createChatApiV1ChatPostResponse200 = {
   data: ChatCreate;
   status: 200;
+};
+
+export type createChatApiV1ChatPostResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
 };
 
 export type createChatApiV1ChatPostResponse422 = {
@@ -51,14 +542,12 @@ export type createChatApiV1ChatPostResponseSuccess =
   createChatApiV1ChatPostResponse200 & {
     headers: Headers;
   };
-export type createChatApiV1ChatPostResponseError =
-  createChatApiV1ChatPostResponse422 & {
-    headers: Headers;
-  };
-
-export type createChatApiV1ChatPostResponse =
-  | createChatApiV1ChatPostResponseSuccess
-  | createChatApiV1ChatPostResponseError;
+export type createChatApiV1ChatPostResponseError = (
+  | createChatApiV1ChatPostResponse401
+  | createChatApiV1ChatPostResponse422
+) & {
+  headers: Headers;
+};
 
 export const getCreateChatApiV1ChatPostUrl = (
   params: CreateChatApiV1ChatPostParams
@@ -81,8 +570,8 @@ export const getCreateChatApiV1ChatPostUrl = (
 export const createChatApiV1ChatPost = async (
   params: CreateChatApiV1ChatPostParams,
   options?: RequestInit
-): Promise<createChatApiV1ChatPostResponse> => {
-  return queryFetch<createChatApiV1ChatPostResponse>(
+): Promise<createChatApiV1ChatPostResponseSuccess> => {
+  return queryFetch<createChatApiV1ChatPostResponseSuccess>(
     getCreateChatApiV1ChatPostUrl(params),
     {
       ...options,
@@ -92,7 +581,7 @@ export const createChatApiV1ChatPost = async (
 };
 
 export const getCreateChatApiV1ChatPostMutationOptions = <
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -133,13 +622,15 @@ export type CreateChatApiV1ChatPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof createChatApiV1ChatPost>>
 >;
 
-export type CreateChatApiV1ChatPostMutationError = HTTPValidationError;
+export type CreateChatApiV1ChatPostMutationError =
+  | TypedHTTPExceptionModelAuthErrorCode
+  | HTTPValidationError;
 
 /**
  * @summary Create Chat
  */
 export const useCreateChatApiV1ChatPost = <
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -163,12 +654,23 @@ export const useCreateChatApiV1ChatPost = <
     queryClient
   );
 };
+
 /**
  * @summary Delete Chat
  */
 export type deleteChatApiV1ChatChatIdDeleteResponse200 = {
   data: unknown;
   status: 200;
+};
+
+export type deleteChatApiV1ChatChatIdDeleteResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
+export type deleteChatApiV1ChatChatIdDeleteResponse404 = {
+  data: TypedHTTPExceptionModelChatErrorCode;
+  status: 404;
 };
 
 export type deleteChatApiV1ChatChatIdDeleteResponse422 = {
@@ -180,14 +682,13 @@ export type deleteChatApiV1ChatChatIdDeleteResponseSuccess =
   deleteChatApiV1ChatChatIdDeleteResponse200 & {
     headers: Headers;
   };
-export type deleteChatApiV1ChatChatIdDeleteResponseError =
-  deleteChatApiV1ChatChatIdDeleteResponse422 & {
-    headers: Headers;
-  };
-
-export type deleteChatApiV1ChatChatIdDeleteResponse =
-  | deleteChatApiV1ChatChatIdDeleteResponseSuccess
-  | deleteChatApiV1ChatChatIdDeleteResponseError;
+export type deleteChatApiV1ChatChatIdDeleteResponseError = (
+  | deleteChatApiV1ChatChatIdDeleteResponse401
+  | deleteChatApiV1ChatChatIdDeleteResponse404
+  | deleteChatApiV1ChatChatIdDeleteResponse422
+) & {
+  headers: Headers;
+};
 
 export const getDeleteChatApiV1ChatChatIdDeleteUrl = (chatId: number) => {
   return `/api/v1/chat/${chatId}`;
@@ -196,8 +697,8 @@ export const getDeleteChatApiV1ChatChatIdDeleteUrl = (chatId: number) => {
 export const deleteChatApiV1ChatChatIdDelete = async (
   chatId: number,
   options?: RequestInit
-): Promise<deleteChatApiV1ChatChatIdDeleteResponse> => {
-  return queryFetch<deleteChatApiV1ChatChatIdDeleteResponse>(
+): Promise<deleteChatApiV1ChatChatIdDeleteResponseSuccess> => {
+  return queryFetch<deleteChatApiV1ChatChatIdDeleteResponseSuccess>(
     getDeleteChatApiV1ChatChatIdDeleteUrl(chatId),
     {
       ...options,
@@ -207,7 +708,10 @@ export const deleteChatApiV1ChatChatIdDelete = async (
 };
 
 export const getDeleteChatApiV1ChatChatIdDeleteMutationOptions = <
-  TError = HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -248,13 +752,19 @@ export type DeleteChatApiV1ChatChatIdDeleteMutationResult = NonNullable<
   Awaited<ReturnType<typeof deleteChatApiV1ChatChatIdDelete>>
 >;
 
-export type DeleteChatApiV1ChatChatIdDeleteMutationError = HTTPValidationError;
+export type DeleteChatApiV1ChatChatIdDeleteMutationError =
+  | TypedHTTPExceptionModelAuthErrorCode
+  | TypedHTTPExceptionModelChatErrorCode
+  | HTTPValidationError;
 
 /**
  * @summary Delete Chat
  */
 export const useDeleteChatApiV1ChatChatIdDelete = <
-  TError = HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -278,6 +788,7 @@ export const useDeleteChatApiV1ChatChatIdDelete = <
     queryClient
   );
 };
+
 /**
  * @summary Get Chats
  */
@@ -286,12 +797,19 @@ export type getChatsApiV1ChatAllGetResponse200 = {
   status: 200;
 };
 
+export type getChatsApiV1ChatAllGetResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
 export type getChatsApiV1ChatAllGetResponseSuccess =
   getChatsApiV1ChatAllGetResponse200 & {
     headers: Headers;
   };
-export type getChatsApiV1ChatAllGetResponse =
-  getChatsApiV1ChatAllGetResponseSuccess;
+export type getChatsApiV1ChatAllGetResponseError =
+  getChatsApiV1ChatAllGetResponse401 & {
+    headers: Headers;
+  };
 
 export const getGetChatsApiV1ChatAllGetUrl = () => {
   return `/api/v1/chat/all`;
@@ -299,8 +817,8 @@ export const getGetChatsApiV1ChatAllGetUrl = () => {
 
 export const getChatsApiV1ChatAllGet = async (
   options?: RequestInit
-): Promise<getChatsApiV1ChatAllGetResponse> => {
-  return queryFetch<getChatsApiV1ChatAllGetResponse>(
+): Promise<getChatsApiV1ChatAllGetResponseSuccess> => {
+  return queryFetch<getChatsApiV1ChatAllGetResponseSuccess>(
     getGetChatsApiV1ChatAllGetUrl(),
     {
       ...options,
@@ -315,7 +833,7 @@ export const getGetChatsApiV1ChatAllGetQueryKey = () => {
 
 export const getGetChatsApiV1ChatAllGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getChatsApiV1ChatAllGet>>,
-  TError = unknown,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
 >(options?: {
   query?: Partial<
     UseQueryOptions<
@@ -345,11 +863,12 @@ export const getGetChatsApiV1ChatAllGetQueryOptions = <
 export type GetChatsApiV1ChatAllGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getChatsApiV1ChatAllGet>>
 >;
-export type GetChatsApiV1ChatAllGetQueryError = unknown;
+export type GetChatsApiV1ChatAllGetQueryError =
+  TypedHTTPExceptionModelAuthErrorCode;
 
 export function useGetChatsApiV1ChatAllGet<
   TData = Awaited<ReturnType<typeof getChatsApiV1ChatAllGet>>,
-  TError = unknown,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
 >(
   options: {
     query: Partial<
@@ -375,7 +894,7 @@ export function useGetChatsApiV1ChatAllGet<
 };
 export function useGetChatsApiV1ChatAllGet<
   TData = Awaited<ReturnType<typeof getChatsApiV1ChatAllGet>>,
-  TError = unknown,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
 >(
   options?: {
     query?: Partial<
@@ -401,7 +920,7 @@ export function useGetChatsApiV1ChatAllGet<
 };
 export function useGetChatsApiV1ChatAllGet<
   TData = Awaited<ReturnType<typeof getChatsApiV1ChatAllGet>>,
-  TError = unknown,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
 >(
   options?: {
     query?: Partial<
@@ -423,7 +942,7 @@ export function useGetChatsApiV1ChatAllGet<
 
 export function useGetChatsApiV1ChatAllGet<
   TData = Awaited<ReturnType<typeof getChatsApiV1ChatAllGet>>,
-  TError = unknown,
+  TError = TypedHTTPExceptionModelAuthErrorCode,
 >(
   options?: {
     query?: Partial<
@@ -457,6 +976,11 @@ export type getChatMessagesApiV1ChatChatIdMessagesGetResponse200 = {
   status: 200;
 };
 
+export type getChatMessagesApiV1ChatChatIdMessagesGetResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
 export type getChatMessagesApiV1ChatChatIdMessagesGetResponse422 = {
   data: HTTPValidationError;
   status: 422;
@@ -466,14 +990,12 @@ export type getChatMessagesApiV1ChatChatIdMessagesGetResponseSuccess =
   getChatMessagesApiV1ChatChatIdMessagesGetResponse200 & {
     headers: Headers;
   };
-export type getChatMessagesApiV1ChatChatIdMessagesGetResponseError =
-  getChatMessagesApiV1ChatChatIdMessagesGetResponse422 & {
-    headers: Headers;
-  };
-
-export type getChatMessagesApiV1ChatChatIdMessagesGetResponse =
-  | getChatMessagesApiV1ChatChatIdMessagesGetResponseSuccess
-  | getChatMessagesApiV1ChatChatIdMessagesGetResponseError;
+export type getChatMessagesApiV1ChatChatIdMessagesGetResponseError = (
+  | getChatMessagesApiV1ChatChatIdMessagesGetResponse401
+  | getChatMessagesApiV1ChatChatIdMessagesGetResponse422
+) & {
+  headers: Headers;
+};
 
 export const getGetChatMessagesApiV1ChatChatIdMessagesGetUrl = (
   chatId: number
@@ -484,8 +1006,8 @@ export const getGetChatMessagesApiV1ChatChatIdMessagesGetUrl = (
 export const getChatMessagesApiV1ChatChatIdMessagesGet = async (
   chatId: number,
   options?: RequestInit
-): Promise<getChatMessagesApiV1ChatChatIdMessagesGetResponse> => {
-  return queryFetch<getChatMessagesApiV1ChatChatIdMessagesGetResponse>(
+): Promise<getChatMessagesApiV1ChatChatIdMessagesGetResponseSuccess> => {
+  return queryFetch<getChatMessagesApiV1ChatChatIdMessagesGetResponseSuccess>(
     getGetChatMessagesApiV1ChatChatIdMessagesGetUrl(chatId),
     {
       ...options,
@@ -502,7 +1024,7 @@ export const getGetChatMessagesApiV1ChatChatIdMessagesGetQueryKey = (
 
 export const getGetChatMessagesApiV1ChatChatIdMessagesGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -546,11 +1068,12 @@ export type GetChatMessagesApiV1ChatChatIdMessagesGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>
 >;
 export type GetChatMessagesApiV1ChatChatIdMessagesGetQueryError =
-  HTTPValidationError;
+  | TypedHTTPExceptionModelAuthErrorCode
+  | HTTPValidationError;
 
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
 >(
   chatId: number,
   options: {
@@ -577,7 +1100,7 @@ export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
 };
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -604,7 +1127,7 @@ export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
 };
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -627,7 +1150,7 @@ export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
 
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -665,6 +1188,16 @@ export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse200 = {
   status: 200;
 };
 
+export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
+export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse404 = {
+  data: TypedHTTPExceptionModelChatErrorCode;
+  status: 404;
+};
+
 export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse422 = {
   data: HTTPValidationError;
   status: 422;
@@ -674,14 +1207,13 @@ export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseSuccess =
   getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse200 & {
     headers: Headers;
   };
-export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseError =
-  getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse422 & {
-    headers: Headers;
-  };
-
-export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse =
-  | getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseSuccess
-  | getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseError;
+export type getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseError = (
+  | getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse401
+  | getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse404
+  | getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse422
+) & {
+  headers: Headers;
+};
 
 export const getGetChatMessageApiV1ChatChatIdMessagesMessageIdGetUrl = (
   chatId: number,
@@ -694,8 +1226,8 @@ export const getChatMessageApiV1ChatChatIdMessagesMessageIdGet = async (
   chatId: number,
   messageId: number,
   options?: RequestInit
-): Promise<getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse> => {
-  return queryFetch<getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponse>(
+): Promise<getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseSuccess> => {
+  return queryFetch<getChatMessageApiV1ChatChatIdMessagesMessageIdGetResponseSuccess>(
     getGetChatMessageApiV1ChatChatIdMessagesMessageIdGetUrl(chatId, messageId),
     {
       ...options,
@@ -716,7 +1248,10 @@ export const getGetChatMessageApiV1ChatChatIdMessagesMessageIdGetQueryOptions =
     TData = Awaited<
       ReturnType<typeof getChatMessageApiV1ChatChatIdMessagesMessageIdGet>
     >,
-    TError = HTTPValidationError,
+    TError =
+      | TypedHTTPExceptionModelAuthErrorCode
+      | TypedHTTPExceptionModelChatErrorCode
+      | HTTPValidationError,
   >(
     chatId: number,
     messageId: number,
@@ -773,13 +1308,18 @@ export type GetChatMessageApiV1ChatChatIdMessagesMessageIdGetQueryResult =
     >
   >;
 export type GetChatMessageApiV1ChatChatIdMessagesMessageIdGetQueryError =
-  HTTPValidationError;
+  | TypedHTTPExceptionModelAuthErrorCode
+  | TypedHTTPExceptionModelChatErrorCode
+  | HTTPValidationError;
 
 export function useGetChatMessageApiV1ChatChatIdMessagesMessageIdGet<
   TData = Awaited<
     ReturnType<typeof getChatMessageApiV1ChatChatIdMessagesMessageIdGet>
   >,
-  TError = HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   messageId: number,
@@ -815,7 +1355,10 @@ export function useGetChatMessageApiV1ChatChatIdMessagesMessageIdGet<
   TData = Awaited<
     ReturnType<typeof getChatMessageApiV1ChatChatIdMessagesMessageIdGet>
   >,
-  TError = HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   messageId: number,
@@ -851,7 +1394,10 @@ export function useGetChatMessageApiV1ChatChatIdMessagesMessageIdGet<
   TData = Awaited<
     ReturnType<typeof getChatMessageApiV1ChatChatIdMessagesMessageIdGet>
   >,
-  TError = HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   messageId: number,
@@ -879,7 +1425,10 @@ export function useGetChatMessageApiV1ChatChatIdMessagesMessageIdGet<
   TData = Awaited<
     ReturnType<typeof getChatMessageApiV1ChatChatIdMessagesMessageIdGet>
   >,
-  TError = HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   messageId: number,
@@ -922,6 +1471,11 @@ export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponse200 = {
   status: 200;
 };
 
+export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponse401 = {
+  data: TypedHTTPExceptionModelAuthErrorCode;
+  status: 401;
+};
+
 export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponse422 = {
   data: HTTPValidationError;
   status: 422;
@@ -931,14 +1485,12 @@ export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponseSuccess =
   createPahalxResponseApiV1ChatChatChatIdResponsePostResponse200 & {
     headers: Headers;
   };
-export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponseError =
-  createPahalxResponseApiV1ChatChatChatIdResponsePostResponse422 & {
-    headers: Headers;
-  };
-
-export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponse =
-  | createPahalxResponseApiV1ChatChatChatIdResponsePostResponseSuccess
-  | createPahalxResponseApiV1ChatChatChatIdResponsePostResponseError;
+export type createPahalxResponseApiV1ChatChatChatIdResponsePostResponseError = (
+  | createPahalxResponseApiV1ChatChatChatIdResponsePostResponse401
+  | createPahalxResponseApiV1ChatChatChatIdResponsePostResponse422
+) & {
+  headers: Headers;
+};
 
 export const getCreatePahalxResponseApiV1ChatChatChatIdResponsePostUrl = (
   chatId: number,
@@ -963,8 +1515,8 @@ export const createPahalxResponseApiV1ChatChatChatIdResponsePost = async (
   chatId: number,
   params: CreatePahalxResponseApiV1ChatChatChatIdResponsePostParams,
   options?: RequestInit
-): Promise<createPahalxResponseApiV1ChatChatChatIdResponsePostResponse> => {
-  return queryFetch<createPahalxResponseApiV1ChatChatChatIdResponsePostResponse>(
+): Promise<createPahalxResponseApiV1ChatChatChatIdResponsePostResponseSuccess> => {
+  return queryFetch<createPahalxResponseApiV1ChatChatChatIdResponsePostResponseSuccess>(
     getCreatePahalxResponseApiV1ChatChatChatIdResponsePostUrl(chatId, params),
     {
       ...options,
@@ -974,7 +1526,10 @@ export const createPahalxResponseApiV1ChatChatChatIdResponsePost = async (
 };
 
 export const getCreatePahalxResponseApiV1ChatChatChatIdResponsePostMutationOptions =
-  <TError = HTTPValidationError, TContext = unknown>(options?: {
+  <
+    TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+    TContext = unknown,
+  >(options?: {
     mutation?: UseMutationOptions<
       Awaited<
         ReturnType<typeof createPahalxResponseApiV1ChatChatChatIdResponsePost>
@@ -1036,13 +1591,14 @@ export type CreatePahalxResponseApiV1ChatChatChatIdResponsePostMutationResult =
   >;
 
 export type CreatePahalxResponseApiV1ChatChatChatIdResponsePostMutationError =
-  HTTPValidationError;
+  | TypedHTTPExceptionModelAuthErrorCode
+  | HTTPValidationError;
 
 /**
  * @summary Create Pahalx Response
  */
 export const useCreatePahalxResponseApiV1ChatChatChatIdResponsePost = <
-  TError = HTTPValidationError,
+  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
   TContext = unknown,
 >(
   options?: {

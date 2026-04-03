@@ -1,28 +1,12 @@
-from dataclasses import dataclass
 from datetime import datetime, timedelta
-from enum import Enum
-from typing import TypedDict
 
 import bcrypt
 import jwt
-from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from pahalx.auth.models import UserModel
 from pahalx.config import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
-
-
-class AuthErrorCode(Enum):
-    USER_NOT_FOUND = "user_not_found"
-    INVALID_CREDENTIALS = "invalid_credentials"
-    TOKEN_EXPIRED = "token_expired"
-    INVALID_TOKEN = "invalid_token"
-    UNKNOWN_ERROR = "unknown_error"
-
-
-@dataclass
-class AuthError(TypedDict):
-    code: AuthErrorCode
+from pahalx.expection import AuthErrorCode, TypedHTTPException
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -56,29 +40,23 @@ def verify_access_token(token: str) -> dict:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username = payload.get("sub")
         if username is None:
-            raise HTTPException(
+            raise TypedHTTPException(
                 status_code=401,
-                detail={
-                    "msg": "Invalid token",
-                    "code": AuthErrorCode.INVALID_TOKEN.value,
-                },
+                msg="Invalid token",
+                code=AuthErrorCode.INVALID_TOKEN,
             )
         return payload
     except jwt.ExpiredSignatureError:
-        raise HTTPException(
+        raise TypedHTTPException(
             status_code=401,
-            detail={
-                "msg": "Token expired",
-                "code": AuthErrorCode.TOKEN_EXPIRED.value,
-            },
+            msg="Token expired",
+            code=AuthErrorCode.TOKEN_EXPIRED,
         )
     except jwt.PyJWTError:
-        raise HTTPException(
+        raise TypedHTTPException(
             status_code=401,
-            detail={
-                "msg": "Invalid token",
-                "code": AuthErrorCode.INVALID_TOKEN.value,
-            },
+            msg="Invalid token",
+            code=AuthErrorCode.INVALID_TOKEN,
         )
 
 
@@ -87,22 +65,18 @@ def authenticate_user(db: Session, username: str, password: str) -> UserModel:
         db.query(UserModel).filter(UserModel.username == username).first()
     )
     if not db_user:
-        raise HTTPException(
+        raise TypedHTTPException(
             status_code=404,
-            detail={
-                "msg": "User not found",
-                "code": AuthErrorCode.USER_NOT_FOUND.value,
-            },
+            msg="User not found",
+            code=AuthErrorCode.USER_NOT_FOUND,
         )
 
     is_valid_password = verify_password(password, str(db_user.password))
 
     if not is_valid_password:
-        raise HTTPException(
+        raise TypedHTTPException(
             status_code=401,
-            detail={
-                "msg": "Invalid credentials",
-                "code": AuthErrorCode.INVALID_CREDENTIALS.value,
-            },
+            msg="Invalid credentials",
+            code=AuthErrorCode.INVALID_CREDENTIALS,
         )
     return db_user

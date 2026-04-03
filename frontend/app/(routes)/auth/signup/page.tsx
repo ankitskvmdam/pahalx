@@ -3,20 +3,48 @@
 import React from "react";
 import { AuthContainer } from "../component";
 import { SignupForm } from "./form";
-import { useCreateUserApiV1AuthUsersPost } from "@/app/_api/auth/auth";
+import {
+  CreateUserApiV1AuthUsersPostMutationError,
+  useCreateUserApiV1AuthUsersPost,
+} from "@/app/_api/client";
 import { useRouter } from "next/navigation";
 import { LOGIN_URL } from "@/app/_contants/routes";
-import { isServerErrorResponse } from "@/app/_utils/fetch";
 
 export default function Page() {
+  const router = useRouter();
   const [error, setError] = React.useState<null | {
     title: string;
     description: string;
   }>(null);
 
-  const router = useRouter();
-  const { mutateAsync: createUser, isPending } =
-    useCreateUserApiV1AuthUsersPost();
+  const handleSuccess = React.useCallback(() => {
+    router.push(LOGIN_URL);
+  }, [router]);
+
+  const handleError = React.useCallback(
+    (error: CreateUserApiV1AuthUsersPostMutationError) => {
+      if (!error || !error.detail || Array.isArray(error.detail)) {
+        setError({
+          title: "Sign up failed",
+          description: "An unknown error occurred.",
+        });
+        return;
+      }
+
+      setError({
+        title: "Sign up failed",
+        description: error.detail.msg || "An unknown error occurred.",
+      });
+    },
+    []
+  );
+
+  const { mutate: createUser, isPending } = useCreateUserApiV1AuthUsersPost({
+    mutation: {
+      onSuccess: handleSuccess,
+      onError: handleError,
+    },
+  });
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,37 +55,15 @@ export default function Page() {
       const username = form["username"].value;
       const password = form["password"].value;
       const name = form["fullname"].value;
-
-      try {
-        const response = await createUser({
-          data: {
-            username,
-            password,
-            name,
-          },
-        });
-
-        if (response.status === 200) {
-          router.push(LOGIN_URL);
-        }
-      } catch (error) {
-        if (isServerErrorResponse(error)) {
-          setError({
-            title: "Sign up failed",
-            description:
-              typeof error.detail === "string"
-                ? error.detail
-                : JSON.stringify(error.detail),
-          });
-        } else {
-          setError({
-            title: "Sing up failed",
-            description: "Please check the form fields and try again.",
-          });
-        }
-      }
+      createUser({
+        data: {
+          username,
+          password,
+          name,
+        },
+      });
     },
-    [createUser, router],
+    [createUser]
   );
 
   return (
