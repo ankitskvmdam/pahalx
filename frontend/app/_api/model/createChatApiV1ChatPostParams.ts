@@ -6,6 +6,6 @@
  */
 
 export type CreateChatApiV1ChatPostParams = {
-  title: string;
+  user_message: string;
   system_prompt?: string;
 };
