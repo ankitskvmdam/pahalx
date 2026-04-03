@@ -5,36 +5,34 @@ import { DashboardSidebar } from "./_sidebar";
 import { DashboardMain } from "./main";
 import React from "react";
 import { useAppStore } from "@/app/_store/app-store";
-import { getCurrentUserApiV1AuthUsersMeGet } from "@/app/_api";
 import { removeAccessToken } from "@/app/_utils/storage";
 import { LoaderCircle } from "lucide-react";
+import { useGetCurrentUserApiV1AuthUsersMeGet } from "@/app/_api/auth/auth";
 
 type TRootDashbaordLayoutProps = {
   children: React.ReactNode;
 };
 export default function RootDashboardLayout(props: TRootDashbaordLayoutProps) {
   const { children } = props;
-  const { user, setUser, setAuthState } = useAppStore((store) => ({
-    user: store.user,
+  const { setUser, setAuthState } = useAppStore((store) => ({
     setUser: store.setUser,
     setAuthState: store.setAuthState,
   }));
 
-  const updateUser = React.useCallback(async () => {
-    const response = await getCurrentUserApiV1AuthUsersMeGet();
-    if (!response || !response.data || response.error) {
-      removeAccessToken();
-      setAuthState("unauthenticated");
-      return;
-    }
-    setUser(response.data);
-  }, [setAuthState, setUser]);
+  const { data, error, isLoading } = useGetCurrentUserApiV1AuthUsersMeGet();
 
   React.useEffect(() => {
-    updateUser();
-  }, [updateUser]);
+    if (error) {
+      removeAccessToken();
+      setAuthState("unauthenticated");
+    }
+    if (data) {
+      setUser(data.data);
+      return;
+    }
+  }, [error, data, setUser, setAuthState]);
 
-  if (!user) {
+  if (isLoading || error) {
     <div className="w-full h-dvh flex items-center justify-center">
       <LoaderCircle className="animate-spin size-8" />
     </div>;

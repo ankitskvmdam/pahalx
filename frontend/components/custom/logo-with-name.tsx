@@ -8,7 +8,7 @@ export function LogoWithName(props: React.HTMLProps<HTMLDivElement>) {
     <div
       className={cn(
         "inline-flex gap-2 [&_svg]:size-6 [&_svg]:fill-foreground [&_span]:font-mono [&_span]:font-bold [&_span]:text-xl",
-        className,
+        className
       )}
       {...rest}
     >

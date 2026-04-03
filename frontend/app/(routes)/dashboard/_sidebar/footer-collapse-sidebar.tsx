@@ -20,7 +20,7 @@ export function DashboardSidebarFooterCollapseSidebar() {
         <BetweenHorizonalEnd
           className={cn(
             "ml-auto transition-transform",
-            state == "collapsed" && "rotate-180",
+            state == "collapsed" && "rotate-180"
           )}
         />
       </SidebarMenuButton>

@@ -1,3 +1,3 @@
 export default function RoutePage() {
-  return null
+  return null;
 }

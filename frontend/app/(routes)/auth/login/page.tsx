@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { loginForAccessTokenApiV1AuthLoginPost } from "@/app/_api";
+import { useLoginForAccessTokenApiV1AuthLoginPost } from "@/app/_api/auth/auth";
 import { AuthContainer } from "../component";
 import { LoginForm } from "./form";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,9 @@ export default function Page() {
     description: string;
   }>(null);
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { mutateAsync: login, isPending } =
+    useLoginForAccessTokenApiV1AuthLoginPost();
+
   const router = useRouter();
   const { setAuthState } = useAppStore((store) => ({
     setAuthState: store.setAuthState,
@@ -24,20 +26,21 @@ export default function Page() {
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setError(null);
-      setIsSubmitting(true);
 
       const form = e.currentTarget;
       const username = form["username"].value;
       const password = form["password"].value;
 
-      const response = await loginForAccessTokenApiV1AuthLoginPost({
-        body: {
+      const response = await login({
+        data: {
           username,
           password,
         },
       });
 
-      if (response.data) {
+      console.log("Response", response);
+
+      if (response.status === 200) {
         setAccessToken(response.data.access_token);
         setAuthState("authenticated");
         router.push(BASE_DASHBOARD_URL);
@@ -48,16 +51,15 @@ export default function Page() {
         title: "Login failed",
         description: "Invalid username or password",
       });
-      setIsSubmitting(false);
     },
-    [router, setAuthState],
+    [router, setAuthState, login]
   );
 
   return (
     <AuthContainer>
       <LoginForm
         error={error}
-        isSubmitting={isSubmitting}
+        isSubmitting={isPending}
         onSubmit={handleSubmit}
       />
     </AuthContainer>

@@ -1,10 +1,6 @@
 import { PahalXLogo } from "@/components/custom/logo";
 import { LogoWithName } from "@/components/custom/logo-with-name";
-import {
-  SidebarHeader,
-  SidebarTrigger,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { SidebarHeader, useSidebar } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function DashboardSidebarHeader() {

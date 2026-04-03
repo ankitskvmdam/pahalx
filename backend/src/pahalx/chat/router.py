@@ -98,7 +98,7 @@ def get_chat_messages(
     return [message_model_to_message(message) for message in messages]
 
 
-@router.get("/{chat_id}/messages/{id}")
+@router.get("/{chat_id}/messages/{message_id}")
 def get_chat_message(
     chat_id: int,
     message_id: int,

@@ -1,5 +1,6 @@
+"use client";
 import React from "react";
-import { getCurrentUserApiV1AuthUsersMeGet } from "../_api";
+import { useGetCurrentUserApiV1AuthUsersMeGet } from "@/app/_api/auth/auth";
 import { getAccessToken, removeAccessToken } from "../_utils/storage";
 import { LOGIN_URL } from "../_contants/routes";
 import { useRouter } from "next/navigation";
@@ -13,33 +14,36 @@ export function useIsUserAuthenticated() {
     setAuthState: store.setAuthState,
   }));
 
-  const isFetchingAuthenticationResult = React.useRef(false);
+  const { data, error, isLoading } = useGetCurrentUserApiV1AuthUsersMeGet({
+    query: {
+      enabled: !!getAccessToken(),
+    },
+  });
 
-  const handleAuthState = React.useCallback(async () => {
-    if (isFetchingAuthenticationResult.current) return;
-    isFetchingAuthenticationResult.current = true;
-
+  React.useEffect(() => {
     if (!getAccessToken()) {
       setAuthState("unauthenticated");
-      isFetchingAuthenticationResult.current = false;
       return;
     }
 
-    setAuthState("pending");
+    if (isLoading) {
+      setAuthState("pending");
+      return;
+    }
 
-    const user = await getCurrentUserApiV1AuthUsersMeGet();
-    if (user) {
+    if (error) {
+      setAuthState("unauthenticated");
+      removeAccessToken();
+      return;
+    }
+
+    if (data) {
       setAuthState("authenticated");
     } else {
       removeAccessToken();
       setAuthState("unauthenticated");
     }
-    isFetchingAuthenticationResult.current = false;
-  }, [setAuthState]);
-
-  React.useEffect(() => {
-    handleAuthState();
-  }, [handleAuthState]);
+  }, [data, error, isLoading, setAuthState]);
 
   return {
     authState,

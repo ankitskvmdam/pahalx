@@ -1,0 +1,11 @@
+
+.next
+node_modules
+out
+build
+.gitignore
+.env.local
+*.config.ts
+package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml

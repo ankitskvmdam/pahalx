@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
 import React from "react";
-import { redirect } from "next/navigation";
 import { AuthContainer } from "../component";
 import { SignupForm } from "./form";
-import { createUserApiV1AuthUsersPost } from "@/app/_api";
+import { useCreateUserApiV1AuthUsersPost } from "@/app/_api/auth/auth";
+import { useRouter } from "next/navigation";
+import { LOGIN_URL } from "@/app/_contants/routes";
 
 export default function Page() {
   const [error, setError] = React.useState<null | {
@@ -12,55 +13,54 @@ export default function Page() {
     description: string;
   }>(null);
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const router = useRouter();
+  const { mutateAsync: createUser, isPending } =
+    useCreateUserApiV1AuthUsersPost();
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setError(null);
-      setIsSubmitting(true);
 
       const form = e.currentTarget;
-      const username = form["username"].value
-      const password = form["password"].value
-      const name = form["fullname"].value
+      const username = form["username"].value;
+      const password = form["password"].value;
+      const name = form["fullname"].value;
 
-
-      const response = await createUserApiV1AuthUsersPost({
-        body: {
+      const response = await createUser({
+        data: {
           username,
           password,
           name,
         },
       });
 
-      if (response.data) {
-        redirect("/auth/login");
+      if (response.status === 200) {
+        router.push(LOGIN_URL);
       }
 
-      console.log("Response", response.error)
-
-      if (response.error) {
+      if (response.status !== 200 && response.data.detail) {
         setError({
           title: "Sign up failed",
-          description: response.error.detail as unknown as string,
+          description: response.data.detail as unknown as string,
         });
-
       } else {
         setError({
           title: "Sing up failed",
           description: "Please check the form fields and try again.",
         });
       }
-
-      setIsSubmitting(false);
     },
-    [],
+    [createUser, router]
   );
 
   return (
     <AuthContainer>
-      <SignupForm onSubmit={handleSubmit} isSubmitting={isSubmitting} error={error} />
+      <SignupForm
+        onSubmit={handleSubmit}
+        isSubmitting={isPending}
+        error={error}
+      />
     </AuthContainer>
   );
 }

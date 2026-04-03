@@ -4,6 +4,7 @@ import "./global.css";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryProvider } from "./query-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -37,15 +38,17 @@ export default function RootLayout({
         openSans.variable,
         monoSpace.variable,
         "font-sans",
-        inter.variable,
+        inter.variable
       )}
     >
       <head>
         <link rel="icon" href="/pahal_logo_small.svg" type="image/svg+xml" />
       </head>
       <body className="min-h-full flex flex-col">
-        <TooltipProvider>{children}</TooltipProvider>
-        <Toaster />
+        <QueryProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+          <Toaster />
+        </QueryProvider>
       </body>
     </html>
   );

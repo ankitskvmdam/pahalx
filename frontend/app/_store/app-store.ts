@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "../_api";
+import { User } from "@/app/_api/model/user";
 import { useShallow } from "zustand/shallow";
 
 export type TAppStoreState = {
@@ -10,7 +10,7 @@ export type TAppStoreState = {
 export type TAppStoreActions = {
   setUser: (user: User | null) => void;
   setAuthState: (
-    authState: "authenticated" | "unauthenticated" | "pending",
+    authState: "authenticated" | "unauthenticated" | "pending"
   ) => void;
 };
 
