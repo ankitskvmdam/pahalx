@@ -69,7 +69,9 @@ async def pahalx_llm_response_generator(
         "Authorization": f"Bearer {LM_STUDIO_API_KEY}",
     }
 
-    client = httpx.AsyncClient()
+    client = httpx.AsyncClient(
+        timeout=httpx.Timeout(read=120.0, pool=None, write=30.0, connect=10.0)
+    )
     async with client.stream(
         "POST", f"{AI_ENDPOINT}/v1/chat/completions", json=payload, headers=headers
     ) as response:
