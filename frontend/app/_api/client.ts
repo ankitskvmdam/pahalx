@@ -981,6 +981,11 @@ export type getChatMessagesApiV1ChatChatIdMessagesGetResponse401 = {
   status: 401;
 };
 
+export type getChatMessagesApiV1ChatChatIdMessagesGetResponse404 = {
+  data: TypedHTTPExceptionModelChatErrorCode;
+  status: 404;
+};
+
 export type getChatMessagesApiV1ChatChatIdMessagesGetResponse422 = {
   data: HTTPValidationError;
   status: 422;
@@ -992,6 +997,7 @@ export type getChatMessagesApiV1ChatChatIdMessagesGetResponseSuccess =
   };
 export type getChatMessagesApiV1ChatChatIdMessagesGetResponseError = (
   | getChatMessagesApiV1ChatChatIdMessagesGetResponse401
+  | getChatMessagesApiV1ChatChatIdMessagesGetResponse404
   | getChatMessagesApiV1ChatChatIdMessagesGetResponse422
 ) & {
   headers: Headers;
@@ -1024,7 +1030,10 @@ export const getGetChatMessagesApiV1ChatChatIdMessagesGetQueryKey = (
 
 export const getGetChatMessagesApiV1ChatChatIdMessagesGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -1069,11 +1078,15 @@ export type GetChatMessagesApiV1ChatChatIdMessagesGetQueryResult = NonNullable<
 >;
 export type GetChatMessagesApiV1ChatChatIdMessagesGetQueryError =
   | TypedHTTPExceptionModelAuthErrorCode
+  | TypedHTTPExceptionModelChatErrorCode
   | HTTPValidationError;
 
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   options: {
@@ -1100,7 +1113,10 @@ export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
 };
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -1127,7 +1143,10 @@ export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
 };
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   options?: {
@@ -1150,7 +1169,10 @@ export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
 
 export function useGetChatMessagesApiV1ChatChatIdMessagesGet<
   TData = Awaited<ReturnType<typeof getChatMessagesApiV1ChatChatIdMessagesGet>>,
-  TError = TypedHTTPExceptionModelAuthErrorCode | HTTPValidationError,
+  TError =
+    | TypedHTTPExceptionModelAuthErrorCode
+    | TypedHTTPExceptionModelChatErrorCode
+    | HTTPValidationError,
 >(
   chatId: number,
   options?: {

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, cast
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
@@ -100,7 +100,12 @@ def delete_chat(
 def get_chats(
     user=Depends(check_user_authentication), db: Session = Depends(get_db)
 ) -> List[ChatGet]:
-    chats = db.query(ChatModel).filter(ChatModel.user_id == user.id).limit(10)
+    chats = (
+        db.query(ChatModel)
+        .filter(ChatModel.user_id == user.id)
+        .order_by(ChatModel.created_at.desc())
+        .limit(10)
+    )
 
     return [
         ChatGet(
@@ -113,7 +118,10 @@ def get_chats(
     ]
 
 
-@router.get("/{chat_id}/messages")
+@router.get(
+    "/{chat_id}/messages",
+    responses={404: {"model": TypedHTTPExceptionModel[ChatErrorCode]}},
+)
 def get_chat_messages(
     chat_id: int, user=Depends(check_user_authentication), db: Session = Depends(get_db)
 ) -> list[MessageGet]:

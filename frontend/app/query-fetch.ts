@@ -42,6 +42,7 @@ export const queryFetch = async <T>(
   };
 
   const request = new Request(requestUrl, requestInit);
+
   const response = await fetch(request);
   const data = await getBody<T>(response);
 
@@ -51,3 +52,22 @@ export const queryFetch = async <T>(
 
   return { status: response.status, data } as T;
 };
+
+export async function fetchStream(url: string, options: RequestInit) {
+  const requestUrl = getUrl(url);
+  const requestHeaders = getHeaders(options.headers);
+
+  const requestInit: RequestInit = {
+    ...options,
+    headers: requestHeaders,
+  };
+
+  const request = new Request(requestUrl, requestInit);
+
+  const response = await fetch(request);
+  if (!response.body) {
+    throw new Error("No body in response");
+  }
+
+  return response.body.pipeThrough(new TextDecoderStream()).getReader();
+}

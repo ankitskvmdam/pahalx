@@ -9,6 +9,8 @@ import {
 } from "@/app/_contants/routes";
 import { useIsUserAuthenticated } from "@/app/_hooks/auth";
 import { useRouter, usePathname } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { DashboardProvider } from "./provider";
 
 export default function RootRouteLayout({
   children,
@@ -16,6 +18,7 @@ export default function RootRouteLayout({
   children: React.ReactNode;
 }) {
   const { authState } = useIsUserAuthenticated();
+  const queryClient = useQueryClient();
 
   const router = useRouter();
 
@@ -56,6 +59,12 @@ export default function RootRouteLayout({
     }
   }, [authState, router, pathname]);
 
+  React.useEffect(() => {
+    if (authState === "unauthenticated") {
+      queryClient.invalidateQueries();
+    }
+  }, [queryClient, authState]);
+
   if (shouldPageBeInLoadingState) {
     return (
       <div className="w-full h-dvh flex items-center justify-center">
@@ -64,5 +73,5 @@ export default function RootRouteLayout({
     );
   }
 
-  return <>{children}</>;
+  return <DashboardProvider>{children}</DashboardProvider>;
 }

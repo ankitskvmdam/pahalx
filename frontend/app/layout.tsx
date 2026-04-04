@@ -38,7 +38,7 @@ export default function RootLayout({
         openSans.variable,
         monoSpace.variable,
         "font-sans",
-        inter.variable,
+        inter.variable
       )}
     >
       <head>
@@ -47,7 +47,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <QueryProvider>
           <TooltipProvider>{children}</TooltipProvider>
-          <Toaster />
+          <Toaster position="top-right" />
         </QueryProvider>
       </body>
     </html>

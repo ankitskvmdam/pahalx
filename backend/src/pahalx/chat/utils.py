@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import cast
 
 import httpx
+from fastapi import Request
 from sqlalchemy.orm import Session
 
 from pahalx.auth.schemas import User
@@ -59,7 +60,11 @@ def message_model_messages_to_payload_message(
     ]
 
 
-async def pahalx_llm_response_generator(payload, chat_id, db: Session):
+async def pahalx_llm_response_generator(
+    payload,
+    chat_id: int,
+    db: Session,
+):
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {LM_STUDIO_API_KEY}",

@@ -12,7 +12,7 @@ export function CodeRendererContainer(props: TCodeRendererContainer) {
   return (
     <div
       className={cn(
-        "rounded-md p-1 relative font-monospace flex flex-col flex-1 bg-muted my-4",
+        "rounded-md p-1 relative font-monospace flex flex-col flex-1 bg-muted my-4 ",
         className
       )}
     >

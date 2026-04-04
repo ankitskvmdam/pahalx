@@ -1,6 +1,10 @@
 import React from "react";
-import ChatInput from "./chat-input";
-import { useCreateChatApiV1ChatPost } from "@/app/_api/client";
+import ChatInput, { TChatInputImperativeActions } from "./chat-input";
+import {
+  CreateChatApiV1ChatPostMutationError,
+  CreateChatApiV1ChatPostMutationResult,
+  useCreateChatApiV1ChatPost,
+} from "@/app/_api/client";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -9,26 +13,49 @@ import { CHAT_ID_QUERY_PARAM } from "@/app/_contants/query-params";
 
 export function NewChat() {
   const router = useRouter();
+  const actionRef = React.useRef<TChatInputImperativeActions>(null);
+  const [error, setError] = React.useState<null | {
+    title: string;
+    description: string;
+  }>(null);
 
   const handleOnCreateChatSuccess = React.useCallback(
-    (chat: any) => {
+    (chat: CreateChatApiV1ChatPostMutationResult) => {
+      if (actionRef.current) {
+        actionRef.current.resetInput();
+      }
       router.push(`${CHAT_URL}?${CHAT_ID_QUERY_PARAM}=${chat.data.id}`);
     },
     [router]
   );
 
-  const {
-    mutate: createChat,
-    error,
-    isPending,
-  } = useCreateChatApiV1ChatPost({
+  const handleOnCreateChatError = React.useCallback(
+    (error: CreateChatApiV1ChatPostMutationError) => {
+      if (!error || !error.detail || Array.isArray(error.detail)) {
+        setError({
+          title: "Something went wrong.",
+          description: "Please try again later.",
+        });
+        return;
+      }
+      setError({
+        title: "Failed to create chat.",
+        description: error.detail.msg,
+      });
+    },
+    []
+  );
+
+  const { mutate: createChat, isPending } = useCreateChatApiV1ChatPost({
     mutation: {
       onSuccess: handleOnCreateChatSuccess,
+      onError: handleOnCreateChatError,
     },
   });
 
   const handleOnSubmit = React.useCallback(
     (value: string) => {
+      setError(null);
       createChat({
         params: {
           user_message: value,
@@ -38,35 +65,19 @@ export function NewChat() {
     [createChat]
   );
 
-  const errorMessage = React.useMemo(() => {
-    if (!error) return null;
-
-    if (
-      error &&
-      error.detail &&
-      "code" in error.detail &&
-      typeof error.detail.code === "string"
-    ) {
-      if (error.detail.code === "token_expired") {
-        return "Your session has expired. Please log in again.";
-      }
-    }
-
-    return "Please try again after some time.";
-  }, [error]);
-
   return (
     <div className="flex flex-col items-center">
       <ChatInput
         onSubmit={handleOnSubmit}
         isDisableSendingMessage={isPending}
+        actionRef={actionRef}
       />
       <div className="flex justify-center w-full px-4">
-        {errorMessage && (
+        {error && (
           <Alert variant="destructive" className="max-w-3xl">
             <AlertCircleIcon />
-            <AlertTitle>Something went wrong.</AlertTitle>
-            <AlertDescription>{errorMessage} </AlertDescription>
+            <AlertTitle>{error.title}</AlertTitle>
+            <AlertDescription>{error.description} </AlertDescription>
           </Alert>
         )}
       </div>
