@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import cast
 
 import httpx
-from fastapi import Request
 from sqlalchemy.orm import Session
 
 from pahalx.auth.schemas import User

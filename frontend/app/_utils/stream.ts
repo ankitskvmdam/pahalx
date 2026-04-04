@@ -46,7 +46,8 @@ export type TParsedStream = {
 };
 
 export function parseStreamData(value: string): TParsedStream[] {
-  if (!value || typeof value !== "string") return [];
+  if (!value || typeof value !== "string" || value.trim() === "data: [DONE]")
+    return [];
   const parts = value.split("data: ").filter((v) => v.trim() !== "");
 
   if (parts[0] === "[DONE]") return [];
@@ -54,9 +55,10 @@ export function parseStreamData(value: string): TParsedStream[] {
   return parts
     .map((p) => {
       try {
+        if (p.trim() === "[DONE]") return null;
         return JSON.parse(p) as TParsedStream;
       } catch (error) {
-        console.log("JSON parsing failed", error, p);
+        console.log("JSON parsing failed", error, p, parts);
         return null;
       }
     })

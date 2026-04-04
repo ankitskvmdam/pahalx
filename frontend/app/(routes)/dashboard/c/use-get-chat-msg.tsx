@@ -8,7 +8,8 @@ import { ChatErrorCode } from "@/app/_api/model";
 import { BASE_DASHBOARD_URL } from "@/app/_contants/routes";
 
 export function useGetChatMessages() {
-  const chatId = useSearchParams().get(CHAT_ID_QUERY_PARAM);
+  const chatId = useSearchParams().get(CHAT_ID_QUERY_PARAM) || 0;
+
   const { data: messages, error } =
     useGetChatMessagesApiV1ChatChatIdMessagesGet(Number(chatId), {
       query: {

@@ -13,6 +13,8 @@ export default function ChatListPage() {
   const chatId = useSearchParams().get(CHAT_ID_QUERY_PARAM);
   const actionRef = React.useRef<TChatInputImperativeActions>(null);
 
+  console.log("Messages", messages);
+
   const handleOnSubmit = React.useCallback(
     (user_message: string) => {
       requestPahalLLMResponse(Number(chatId), user_message);

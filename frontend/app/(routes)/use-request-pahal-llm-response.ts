@@ -22,9 +22,42 @@ export function useRequestPahalLLMResponse() {
   const router = useRouter();
 
   const requestPahalLLMResponse = React.useCallback(
-    (chat_id: number, user_message: string) => {
+    async (chat_id: number, user_message: string) => {
       function getQueryKey() {
         return [getGetChatMessagesApiV1ChatChatIdMessagesGetUrl(chat_id)];
+      }
+
+      function init() {
+        queryClient.setQueryData(
+          getQueryKey(),
+          (
+            old: getChatMessagesApiV1ChatChatIdMessagesGetResponse200
+          ): getChatMessagesApiV1ChatChatIdMessagesGetResponse200 => {
+            const prevData = old?.data ?? [];
+            return {
+              status: 200,
+              data: [
+                ...prevData,
+                {
+                  id: Date.now(),
+                  chat_id,
+                  role: "user",
+                  content: user_message,
+                  created_at: new Date().toISOString(),
+                  status: "completed",
+                },
+                {
+                  id: Date.now(),
+                  chat_id,
+                  role: "assistant",
+                  content: "",
+                  created_at: new Date().toISOString(),
+                  status: "streaming",
+                },
+              ],
+            };
+          }
+        );
       }
 
       function pushData(
@@ -98,8 +131,7 @@ export function useRequestPahalLLMResponse() {
         }
       }
 
-      pushData(user_message, "user", "completed");
-      pushData("", "assistant", "streaming");
+      init();
 
       MessageManager.enqueueRequestHandler(
         `chat-${chat_id}-${nanoid()}`,
